@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Ennemies
       Game
       Item
       Lib

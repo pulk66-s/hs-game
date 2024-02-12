@@ -1,7 +1,9 @@
 module Item (
     Item(..),
     Weapon(..),
-    Sword(..)
+    Sword(..),
+    excalibur,
+    rustySword
 ) where
 
 data Sword = Sword {
@@ -14,3 +16,9 @@ newtype Weapon = Weapon Sword
 
 newtype Item = Item Weapon
     deriving Show
+
+excalibur :: Weapon
+excalibur = Weapon (Sword "Excalibur" 10)
+
+rustySword :: Weapon
+rustySword = Weapon (Sword "Rusty Sword" 5)
