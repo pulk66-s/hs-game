@@ -12,7 +12,7 @@ data Command =
     ShowMap             |
     ShowHelp            |
     Search              |
-    Inventory           |
+    ShowInventory       |
     HoldWeapon String   |
     PlayerData          
     deriving Show
@@ -29,7 +29,7 @@ parseCommand "exit"                             = Just Exit
 parseCommand "help"                             = Just ShowHelp
 parseCommand "map"                              = Just ShowMap
 parseCommand "search"                           = Just Search
-parseCommand "inventory"                        = Just Inventory
+parseCommand "inventory"                        = Just ShowInventory
 parseCommand "player"                           = Just PlayerData
 parseCommand cmd    | startsWith "move " cmd    = moveCommand (drop 5 cmd)
                     | startsWith "hold " cmd    = Just (HoldWeapon (drop 5 cmd))

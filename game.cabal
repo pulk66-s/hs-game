@@ -25,6 +25,9 @@ source-repository head
 
 library
   exposed-modules:
+      Commands.Move
+      Commands.Search
+      Commands.Show
       Ennemies
       Game
       Item

@@ -7,13 +7,9 @@ import Terminal
 import Player
 import Room
 import Item
-
-understandSearchCommand :: Game -> IO()
-understandSearchCommand g   | null (loot (room g))  = print "You find nothing" >> gameLoop g
-                            | otherwise             = print ("You find " ++ show (length items) ++ " items")
-    >> printItemList items >> gameLoop (searchRoom g)
-    where
-        items   = loot (room g)
+import Commands.Show
+import Commands.Move
+import Commands.Search
 
 tryHoldingWeapon :: Game -> Maybe Weapon -> (Game -> IO()) -> IO()
 tryHoldingWeapon g Nothing n    = print "You don't have that weapon" >> n g
@@ -21,16 +17,10 @@ tryHoldingWeapon g (Just w) n   = print ("You are now holding " ++ show w) >> n 
 
 understandCommand :: Game -> Command -> IO()
 understandCommand _ Exit            = print "Goodbye"
-understandCommand g ShowMap         = print (show (room g)) >> gameLoop g
-understandCommand g ShowHelp        = print "Commands: move [N|S|E|W], map, help, exit" >> gameLoop g
-understandCommand g Search          = understandSearchCommand g
-understandCommand g Inventory       = printInventory (player g)  >> gameLoop g
 understandCommand g (HoldWeapon n)  = tryHoldingWeapon g (findWeaponByName (player g) n) gameLoop
-understandCommand g PlayerData      = print (show (player g)) >> gameLoop g
-understandCommand g (Move d)        = extractMaybe (moveRoom g d)
-    where
-        extractMaybe (Just g')  = print ("Moving to " ++ show d) >> gameLoop g'
-        extractMaybe Nothing    = print "You can't go that way" >> gameLoop g
+understandCommand g (Move d)        = moveCommand g d gameLoop
+understandCommand g Search          = searchCommand g gameLoop
+understandCommand g cmd             = showCommands g cmd gameLoop
 
 evaluateCommand :: Game -> Maybe Command -> IO()
 evaluateCommand g Nothing   = print "Command not found" >> gameLoop g
