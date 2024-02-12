@@ -10,7 +10,9 @@ data Command =
     Move Direction  |
     Exit            |
     ShowMap         |
-    ShowHelp
+    ShowHelp        |
+    Search          |
+    Inventory
     deriving Show
 
 moveCommand :: String -> Maybe Command
@@ -24,5 +26,7 @@ parseCommand :: String -> Maybe Command
 parseCommand "exit"                             = Just Exit
 parseCommand "help"                             = Just ShowHelp
 parseCommand "map"                              = Just ShowMap
+parseCommand "search"                           = Just Search
+parseCommand "inventory"                        = Just Inventory
 parseCommand cmd    | startsWith "move " cmd    = moveCommand (drop 5 cmd)
                     | otherwise                 = Nothing
