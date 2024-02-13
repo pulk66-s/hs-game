@@ -25,16 +25,18 @@ source-repository head
 
 library
   exposed-modules:
+      Base
       Commands.Move
       Commands.Search
       Commands.Show
-      Ennemies
+      Enemies
       Game
       Item
       Lib
       MyList
       Player
       Room
+      States.Fight
       Terminal
   other-modules:
       Paths_game

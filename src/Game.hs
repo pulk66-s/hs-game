@@ -1,7 +1,8 @@
 module Game (
     Game(..),
     moveRoom,
-    searchRoom
+    searchRoom,
+    isEnemies
 ) where
 
 import Player
@@ -25,3 +26,7 @@ addItems p items    = p { inventory = inventory p ++ items }
 
 searchRoom :: Game -> Game
 searchRoom (Game p r)   = Game (addItems p (loot r)) (r { loot = [] })
+
+isEnemies :: Game -> Bool
+isEnemies g    = not (null (enemies (room g)))
+

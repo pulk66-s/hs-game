@@ -3,22 +3,26 @@ module Item (
     Weapon(..),
     Sword(..),
     excalibur,
-    rustySword
+    rustySword,
+    weaponDamage
 ) where
 
 data Sword = Sword {
-    name :: String,
+    swordName :: String,
     damage :: Int
 } deriving Show
 
-newtype Weapon = Weapon Sword
+newtype Weapon = WSword Sword
     deriving Show
 
-newtype Item = Item Weapon
+newtype Item = IWeapon Weapon
     deriving Show
 
 excalibur :: Weapon
-excalibur = Weapon (Sword "Excalibur" 10)
+excalibur = WSword (Sword "Excalibur" 10)
 
 rustySword :: Weapon
-rustySword = Weapon (Sword "Rusty Sword" 5)
+rustySword = WSword (Sword "Rusty Sword" 5)
+
+weaponDamage :: Weapon -> Int
+weaponDamage (WSword s) = damage s

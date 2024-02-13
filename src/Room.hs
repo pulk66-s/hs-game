@@ -2,11 +2,14 @@ module Room (
     Room(..),
     Direction(..),
     testRooms,
-    printItemList
+    printItemList,
+    enemyInRoom,
+    findEnemy
 ) where
 
 import Item
-import Ennemies
+import Enemies
+import Player
 
 data Direction = North | East | South | West
     deriving (Show, Eq)
@@ -14,7 +17,7 @@ data Direction = North | East | South | West
 data Room = Room {
     nextRooms :: [(Direction, Room)],
     loot :: [Item],
-    ennemies :: [Ennemy]
+    enemies :: [Enemy]
 } deriving Show
 
 testRooms :: Room
@@ -22,8 +25,16 @@ testRooms   = Room rooms [] []
     where
         rooms       = [(North, lootRoom), (South, enemyRoom), (East, emptyRoom), (West, emptyRoom)]
         emptyRoom   = Room [] [] []
-        lootRoom    = Room [] [Item excalibur] []
+        lootRoom    = Room [] [IWeapon excalibur] []
         enemyRoom   = Room [] [] [goblin]
 
 printItemList :: [Item] -> IO()
 printItemList l  = print (show l)
+
+enemyInRoom :: Room -> String -> Bool
+enemyInRoom r n    = length (filter (\e -> enemyName e == n) (enemies r)) == 1
+
+findEnemy :: Room -> String -> Maybe Enemy
+findEnemy r name
+    | enemyInRoom r name   = Just (head (filter (\e -> enemyName e == name) (enemies r)))
+    | otherwise             = Nothing
