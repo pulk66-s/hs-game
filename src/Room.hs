@@ -1,10 +1,10 @@
 module Room (
     Room(..),
     Direction(..),
-    printItemList,
     enemyInRoom,
     findEnemy,
-    printRoom
+    printRoom,
+    printDirection
 ) where
 
 import Item
@@ -19,9 +19,6 @@ data Room = Room {
     enemies :: [Enemy]
 } deriving Show
 
-printItemList :: [Item] -> IO()
-printItemList l  = print (show l)
-
 enemyInRoom :: Room -> String -> Bool
 enemyInRoom r n    = length (filter (\e -> enemyName e == n) (enemies r)) == 1
 
@@ -31,14 +28,14 @@ findEnemy r n
     | otherwise         = Nothing
 
 printDirection :: Direction -> IO()
-printDirection North    = putStrLn "North"
-printDirection South    = putStrLn "South"
-printDirection East     = putStrLn "East"
-printDirection West     = putStrLn "West"
+printDirection North    = putStr "North"
+printDirection South    = putStr "South"
+printDirection East     = putStr "East"
+printDirection West     = putStr "West"
 
 printDoorDirections :: [(Direction, Room)] -> IO()
 printDoorDirections [] = putStrLn ""
-printDoorDirections ((d, _):xs) = printDirection d >> printDoorDirections xs
+printDoorDirections ((d, _):xs) = printDirection d >> putStrLn "" >> printDoorDirections xs
 
 printDoors :: Room -> IO()
 printDoors r    | null (nextRooms r)    = putStrLn "There are no doors"
@@ -46,7 +43,7 @@ printDoors r    | null (nextRooms r)    = putStrLn "There are no doors"
 
 printLoot :: Room -> IO()
 printLoot r | null (loot r) = putStrLn "There is no loot"
-            | otherwise     = printItemList (loot r)
+            | otherwise     = printItems (loot r)
 
 printEnemies :: Room -> IO()
 printEnemies r  | null (enemies r) = putStrLn "There are no enemies"

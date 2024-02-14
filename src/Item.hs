@@ -4,7 +4,9 @@ module Item (
     Sword(..),
     excalibur,
     rustySword,
-    weaponDamage
+    weaponDamage,
+    printWeapon,
+    printItems
 ) where
 
 data Sword = Sword {
@@ -26,3 +28,12 @@ rustySword = WSword (Sword "Rusty Sword" 50)
 
 weaponDamage :: Weapon -> Int
 weaponDamage (WSword s) = damage s
+
+printWeapon :: Weapon -> IO()
+printWeapon (WSword s)  = putStr (swordName s ++ " with " ++ show (damage s) ++ " damage")
+
+printItem :: Item -> IO()
+printItem (IWeapon w)   = printWeapon w
+
+printItems :: [Item] -> IO()
+printItems = foldr (\x -> (>>) (printItem x >> putStrLn "")) (putStrLn "")

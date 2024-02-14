@@ -24,11 +24,12 @@ goblin :: Enemy
 goblin  = Enemy "Goblin" 15 rustySword
 
 listEnemies :: [Enemy] -> IO()
-listEnemies [] = print "There is no Enemy"
+listEnemies [] = putStrLn "There is no Enemy"
 listEnemies e  = mapM_ printEnemy e
 
 printEnemy :: Enemy -> IO()
-printEnemy e   = print (enemyName e ++ " with " ++ show (enemyHealth e) ++ " health and a " ++ show (enemyWeapon e))
+printEnemy e   = putStr (enemyName e ++ " with " ++ show (enemyHealth e) ++ " health and a ")
+    >> printWeapon (enemyWeapon e) >> putStrLn ""
 
 dealDamageToEnemy :: Enemy -> Int -> Enemy
 dealDamageToEnemy e amount = e { enemyHealth = enemyHealth e - amount }

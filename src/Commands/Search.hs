@@ -4,11 +4,12 @@ module Commands.Search (
 
 import Game
 import Room
+import Item
 
 searchCommand :: Game -> (Game -> IO()) -> IO()
-searchCommand g n   | null (loot (room g))  = print "You find nothing" >> n g
-                    | otherwise             = print ("You find " ++ show (length items) ++ " items")
-    >> printItemList items >> n (searchRoom g)
+searchCommand g n   | null (loot (room g))  = putStrLn "You find nothing" >> n g
+                    | otherwise             = putStrLn ("You find " ++ show (length items) ++ " items")
+    >> printItems items >> n (searchRoom g)
     where
         items   = loot (room g)
 

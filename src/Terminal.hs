@@ -2,11 +2,13 @@ module Terminal (
     Command(..),
     FightCommand(..),
     parseCommand,
-    getFightCommand
+    getFightCommand,
+    printPrompt
 ) where
 
 import Room
 import MyList
+import System.IO
 
 data Command =
     Move Direction      |
@@ -50,4 +52,8 @@ parseFightCommand "enemies"     = Just EnemyInfo
 parseFightCommand _             = Nothing
 
 getFightCommand :: (Maybe FightCommand -> IO()) -> IO()
-getFightCommand next    = getLine >>= next . parseFightCommand
+getFightCommand next    = printPrompt >> getLine >>= next . parseFightCommand
+
+printPrompt :: IO()
+printPrompt = putStrLn "===" >> putStrLn "Enter your command" >>
+    putStr ">> " >> hFlush stdout
