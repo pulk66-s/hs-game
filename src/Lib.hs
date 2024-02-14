@@ -5,11 +5,11 @@ module Lib (
 import Game
 import Terminal
 import Player
-import Room
 import Item
 import Commands.Show
 import Commands.Move
 import Commands.Search
+import Map.Default
 
 tryHoldingWeapon :: Game -> Maybe Weapon -> (Game -> IO()) -> IO()
 tryHoldingWeapon g Nothing n    = print "You don't have that weapon" >> n g
@@ -29,7 +29,7 @@ evaluateCommand g (Just c)  = understandCommand g c
 play :: IO()
 play    = gameLoop (Game newPlayer newRoom)
     where
-        newRoom     = testRooms
+        newRoom     = defaultRoom
 
 gameLoop :: Game -> IO()
 gameLoop g  = getLine >>= evaluateCommand g . parseCommand

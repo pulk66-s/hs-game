@@ -5,9 +5,10 @@ module Commands.Show (
 import Game
 import Terminal
 import Player
+import Room
 
 showMap :: Game -> IO()
-showMap g   = print (show (room g))
+showMap g   = printRoom (room g)
 
 showHelp :: IO()
 showHelp   = print "Commands: move [N|S|E|W], map, help, exit"

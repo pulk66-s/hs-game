@@ -33,6 +33,7 @@ library
       Game
       Item
       Lib
+      Map.Default
       MyList
       Player
       Room
