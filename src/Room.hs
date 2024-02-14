@@ -9,7 +9,6 @@ module Room (
 
 import Item
 import Enemies
-import Player
 
 data Direction = North | East | South | West
     deriving (Show, Eq)
@@ -35,6 +34,6 @@ enemyInRoom :: Room -> String -> Bool
 enemyInRoom r n    = length (filter (\e -> enemyName e == n) (enemies r)) == 1
 
 findEnemy :: Room -> String -> Maybe Enemy
-findEnemy r name
-    | enemyInRoom r name   = Just (head (filter (\e -> enemyName e == name) (enemies r)))
-    | otherwise             = Nothing
+findEnemy r n
+    | enemyInRoom r n   = Just (head (filter (\e -> enemyName e == n) (enemies r)))
+    | otherwise         = Nothing

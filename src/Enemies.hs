@@ -6,7 +6,9 @@ module Enemies (
     dealDamageToEnemy,
     updateEnemies,
     attackEnemy,
-    deleteDeadEnemies
+    deleteDeadEnemies,
+    enemyAttackPlayer,
+    enemyDamage
 ) where
 
 import Item
@@ -14,7 +16,7 @@ import Player
 
 data Enemy = Enemy {
     enemyName :: String,
-    health :: Int,
+    enemyHealth :: Int,
     enemyWeapon :: Weapon
 } deriving Show
 
@@ -26,16 +28,16 @@ listEnemies [] = print "There is no Enemy"
 listEnemies e  = mapM_ printEnemy e
 
 printEnemy :: Enemy -> IO()
-printEnemy e   = print (enemyName e ++ " with " ++ show (health e) ++ " health and a " ++ show (enemyWeapon e))
+printEnemy e   = print (enemyName e ++ " with " ++ show (enemyHealth e) ++ " health and a " ++ show (enemyWeapon e))
 
 dealDamageToEnemy :: Enemy -> Int -> Enemy
-dealDamageToEnemy e amount = e { health = health e - amount }
+dealDamageToEnemy e amount = e { enemyHealth = enemyHealth e - amount }
 
 isDead :: Enemy -> Bool
-isDead e    = health e <= 0
+isDead e    = enemyHealth e <= 0
 
 attackEnemy :: Player -> Enemy -> Enemy
-attackEnemy p e    = e { health = health e - playerAttack }
+attackEnemy p e    = e { enemyHealth = enemyHealth e - playerAttack }
     where
         playerAttack    = playerDamage p
 
@@ -47,3 +49,9 @@ updateEnemies (x:xs) n
 
 deleteDeadEnemies :: [Enemy] -> [Enemy]
 deleteDeadEnemies   = filter (not . isDead)
+
+enemyDamage :: Enemy -> Int
+enemyDamage e   = weaponDamage (enemyWeapon e)
+
+enemyAttackPlayer :: Enemy -> Player -> Player
+enemyAttackPlayer e p  = p { playerHealth = playerHealth p - enemyDamage e }

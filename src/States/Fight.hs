@@ -6,10 +6,30 @@ import Game
 import Terminal
 import Enemies
 import Room
+import Player
+import System.Exit
+
+enemiesAttack :: Game -> [Enemy] -> (Game -> IO()) -> IO()
+enemiesAttack g [] next     = checkPlayerAlive g next
+enemiesAttack g (x:xs) next = printAttack >> enemiesAttack updatedGame xs next
+    where
+        updatedGame = g { player = enemyAttackPlayer x (player g) }
+        printAttack = putStrLn ("You are attacked by " ++ enemyName x 
+            ++ " that deals " ++ show (enemyDamage x) ++ " damages")
+
+checkPlayerAlive :: Game -> (Game -> IO()) -> IO()
+checkPlayerAlive g next
+    | playerIsDead (player g)   = putStrLn "You are dead" >> exitSuccess
+    | otherwise                 = fightLoop g next
+
+checkEnemiesAttack :: Game -> (Game -> IO()) -> IO()
+checkEnemiesAttack g next
+    | isEnemies g   = enemiesAttack g (enemies (room g)) next
+    | otherwise     = next g
 
 validateAttackAction :: Game -> Maybe Enemy -> (Game -> IO()) -> IO()
 validateAttackAction g Nothing next     = print "Enemy not found" >> fightLoop g next
-validateAttackAction g (Just e) next    = print str >> fightLoop updatedGame next
+validateAttackAction g (Just e) next    = print str >> checkEnemiesAttack updatedGame next
     where
         str         = "You are attacking " ++ enemyName e
         updatedGame = g { room = (room g) { enemies = newEnemies } }

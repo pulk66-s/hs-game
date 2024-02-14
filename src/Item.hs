@@ -22,7 +22,7 @@ excalibur :: Weapon
 excalibur = WSword (Sword "Excalibur" 10)
 
 rustySword :: Weapon
-rustySword = WSword (Sword "Rusty Sword" 5)
+rustySword = WSword (Sword "Rusty Sword" 50)
 
 weaponDamage :: Weapon -> Int
 weaponDamage (WSword s) = damage s
