@@ -5,12 +5,21 @@ module Commands.Search (
 import Game
 import Room
 import Item
+import List
+import Player
+
+applyChanges :: Game -> Game
+applyChanges g  = updateRoom (updatePlayer g)
+    where
+        updatePlayer g      = g { player = updateInventory (player g) }
+        updateInventory p   = p { inventory = addList (inventory p) (loot (getRoom g)) }
+        updateRoom g        = g { room = updateLoot (room g) }
+        updateLoot (i, r)   = (i, r { loot = defaultList })
 
 searchCommand :: Game -> (Game -> IO()) -> IO()
-searchCommand g n = print ""
--- searchCommand g n   | null (loot (room g))  = putStrLn "You find nothing" >> n g
---                     | otherwise             = putStrLn ("You find " ++ show (length items) ++ " items")
---     >> printItems items >> n (searchRoom g)
---     where
---         items   = loot (room g)
-
+searchCommand g n   = case loot (getRoom g) of
+    List [] -> putStrLn "There is nothing to loot" >> n g
+    List l  -> do
+        putStrLn "You found some loot"
+        printItems l
+        n (applyChanges g)

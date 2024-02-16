@@ -10,7 +10,7 @@ import List
 import Item 
 
 showMap :: Game -> IO()
-showMap g   = printRoom (room g)
+showMap g   = printRoom (getRoom g)
 
 showHelp :: IO()
 showHelp   = putStrLn "Commands: move [N|S|E|W], map, help, exit"

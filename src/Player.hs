@@ -21,7 +21,7 @@ data Player = Player {
 } deriving Show
 
 newPlayer :: Player
-newPlayer   = Player 20 "Hugo" (Just excalibur) (List [])
+newPlayer   = Player 20 "Hugo" Nothing (List [])
 
 printPlayerInventory :: Player -> IO()
 printPlayerInventory p = printList (inventory p) printItem
@@ -51,11 +51,14 @@ printPlayerWeapon Nothing   = putStrLn "No weapon"
 printPlayerWeapon (Just w)  = printWeapon w
 
 printPlayer :: Player -> IO()
-printPlayer p   = putStrLn "Here is your player datas"
-    >> putStrLn ("Name: " ++ playerName p)
-    >> putStrLn ("Health: " ++ show (playerHealth p))
-    >> putStrLn "Inventory: " >> printPlayerInventory p
-    >> putStrLn "Weapon: " >> printPlayerWeapon (playerWeapon p)
+printPlayer p   = do
+    putStrLn "Here is your player datas"
+    putStrLn ("Name: " ++ playerName p)
+    putStrLn ("Health: " ++ show (playerHealth p))
+    putStrLn "Inventory: "
+    printPlayerInventory p
+    putStrLn "\nWeapon: "
+    printPlayerWeapon (playerWeapon p)
 
 addItems :: Player -> [Item] -> Player
-addItems p items    = p { inventory = foldr addList (inventory p) items }
+addItems p items    = p { inventory = addList (inventory p) (List items) }

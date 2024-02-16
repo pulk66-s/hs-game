@@ -1,18 +1,19 @@
 module Game (
     Game(..),
-    defaultGame
+    defaultGame,
+    getNextRoom,
+    getRoom
 ) where
 
 import Player
 import Room
 import Enemies
-import MyList
 import Item
 import List
 
 data Game = Game {
     player :: Player,
-    room :: Room,
+    room :: (Int, Room),
     rooms :: List (Int, Room)
 } deriving Show
 
@@ -23,17 +24,27 @@ startingRoom    = addEnnemy (addLoot defaultRoom)
         addEnnemy   = addNextRoom South 2
 
 lootRoom :: Room
-lootRoom    = addLoot defaultRoom
+lootRoom    = addStartingRoom (addLoot defaultRoom)
     where
-        addLoot = addLootToRoom (IWeapon excalibur)
+        addLoot         = addLootToRoom (IWeapon excalibur)
+        addStartingRoom = addNextRoom South 0
 
 enemyRoom :: Room
-enemyRoom  = addEnnemy defaultRoom
+enemyRoom  = addStartingRoom (addEnnemy defaultRoom)
     where
-        addEnnemy = addEnnemyToRoom goblin
+        addEnnemy       = addEnnemyToRoom goblin
+        addStartingRoom = addNextRoom North 0
 
 defaultRoomList :: List (Int, Room)
 defaultRoomList = List [(0, startingRoom), (1, lootRoom), (2, enemyRoom)]
 
 defaultGame :: Game
-defaultGame = Game newPlayer defaultRoom defaultRoomList
+defaultGame = Game newPlayer (0, startingRoom) defaultRoomList
+
+getNextRoom :: Game -> Direction -> Maybe (Int, Room)
+getNextRoom g d = case findInList (\(d', _) -> d' == d) (nextRooms (getRoom g)) of
+    Just (_, i) -> findInList (\(i', _) -> i' == i) (rooms g)
+    Nothing     -> Nothing
+
+getRoom :: Game -> Room
+getRoom g = snd (room g)

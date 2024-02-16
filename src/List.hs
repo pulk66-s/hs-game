@@ -7,7 +7,8 @@ module List (
     defaultList,
     isEmpty,
     updateList,
-    lengthList
+    lengthList,
+    addElem
 ) where
 
 newtype List a = List [a] deriving Show
@@ -15,14 +16,17 @@ newtype List a = List [a] deriving Show
 defaultList :: List a
 defaultList = List []
 
-addList :: a -> List a -> List a
-addList x (List xs) = List (x:xs)
+addElem :: a -> List a -> List a
+addElem x (List xs) = List (x:xs)
+
+addList :: List a -> List a -> List a
+addList (List xs) (List ys) = List (xs ++ ys)
 
 removeList :: Eq a => a -> List a -> List a
 removeList x (List xs) = List (filter (/= x) xs)
 
 printList :: List a -> (a -> IO()) -> IO()
-printList (List []) _   = putStrLn "There is no elements in the List"
+printList (List []) _   = putStrLn "There is no elements"
 printList (List xs) f   = mapM_ f xs
 
 findInList :: (a -> Bool) -> List a -> Maybe a

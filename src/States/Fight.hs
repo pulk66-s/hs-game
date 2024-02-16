@@ -25,38 +25,42 @@ checkPlayerAlive g next
 
 checkEnemiesAttack :: Game -> (Game -> IO()) -> IO()
 checkEnemiesAttack g next
-    | isEnemies (room g)    = enemiesAttack g (enemies (room g)) next
+    | isEnemies (getRoom g) = enemiesAttack g (enemies (getRoom g)) next
     | otherwise             = next g
 
 validateAttackAction :: Game -> Maybe Enemy -> (Game -> IO()) -> IO()
 validateAttackAction g Nothing next     = putStrLn "Enemy not found" >> fightLoop g next
 validateAttackAction g (Just e) next    = putStrLn str >> checkEnemiesAttack updatedGame next
     where
-        str         = "You are attacking " ++ enemyName e
-        updatedGame = g { room = (room g) { enemies = newEnemies } }
-        newEnemies  = deleteDeadEnemies (updateEnemies (enemies (room g)) (attackEnemy (player g) e))
+        str                 = "You are attacking " ++ enemyName e
+        updatedGame         = g { room = updatedRoom (room g) }
+        updatedRoom (i, r)  = (i, r { enemies = newEnemies })
+        newEnemies          = deleteDeadEnemies (updateEnemies (enemies (getRoom g)) (attackEnemy (player g) e))
 
 applyAction :: Game -> (Game -> IO()) -> Maybe FightCommand -> IO()
 applyAction g n (Just (Attack name))
-    | isEnnemyWithName (room g) name    = validateAttackAction g (findEnemyWithName (room g) name) n
+    | isEnnemyWithName (getRoom g) name = validateAttackAction g (findEnemyWithName (getRoom g) name) n
     | otherwise                         = putStrLn "Enemy not found" >> fightLoop g n
-applyAction g n (Just EnemyInfo)        = putStrLn "Here are the Enemies" >> listEnemies (enemies (room g)) >> fightLoop g n
+applyAction g n (Just EnemyInfo)        = do
+    putStrLn "Here are the Enemies"
+    listEnemies (enemies (getRoom g))
+    fightLoop g n
 applyAction g n Nothing                 = putStrLn "Command not found" >> fightLoop g n
 
 fightLoop :: Game -> (Game -> IO()) -> IO()
 fightLoop g n
-    | isEnemies (room g)    = getFightCommand (applyAction g n)
+    | isEnemies (getRoom g) = getFightCommand (applyAction g n)
     | otherwise             = putStrLn "You killed all enemies " >> n g
 
 printStartFight :: Game -> IO()
 printStartFight g   = putStrLn ("You are fighting " ++ show (lengthList e) ++ " Enemies") >> listEnemies e
     where
-        e = enemies (room g)
+        e = enemies (getRoom g)
 
 launchFight :: Game -> (Game -> IO()) -> IO()
 launchFight g n = printStartFight g >> fightLoop g n
 
 checkFight :: Game -> (Game -> IO()) -> IO()
 checkFight g next
-    | isEnemies (room g)    = launchFight g next
+    | isEnemies (getRoom g) = launchFight g next
     | otherwise             = next g
