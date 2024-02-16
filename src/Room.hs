@@ -14,6 +14,7 @@ module Room (
 import Item
 import Enemies
 import List
+import Maybe
 
 data Direction = North | East | South | West
     deriving (Show, Eq)
@@ -44,9 +45,6 @@ findEnemyWithName r name    = findInList (\x -> enemyName x == name) (enemies r)
 
 isEnnemyWithName :: Room -> String -> Bool
 isEnnemyWithName r n    = isJust (findEnemyWithName r n)
-    where
-        isJust (Just _) = True
-        isJust _        = False
 
 printRoom :: Room -> IO()
 printRoom r = do
