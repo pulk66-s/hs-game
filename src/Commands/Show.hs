@@ -5,8 +5,9 @@ module Commands.Show (
 import Game
 import Terminal
 import Player
-import Player.Inventory
 import Room
+import List
+import Item 
 
 showMap :: Game -> IO()
 showMap g   = printRoom (room g)
@@ -15,7 +16,7 @@ showHelp :: IO()
 showHelp   = putStrLn "Commands: move [N|S|E|W], map, help, exit"
 
 showInventory :: Game -> IO()
-showInventory g = printInventory (inventory (player g))
+showInventory g = printList (inventory (player g)) printItem
 
 showCommands :: Game -> Command -> (Game -> IO()) -> IO()
 showCommands g ShowMap n        = showMap g >> n g

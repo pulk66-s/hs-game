@@ -1,28 +1,39 @@
 module Game (
     Game(..),
-    moveRoom,
-    searchRoom,
-    isEnemies
+    defaultGame
 ) where
 
 import Player
 import Room
+import Enemies
 import MyList
+import Item
+import List
 
 data Game = Game {
     player :: Player,
-    room :: Room
+    room :: Room,
+    rooms :: List (Int, Room)
 } deriving Show
 
-moveRoom :: Game -> Direction -> Maybe Game
-moveRoom g d    = extractMaybe (find (\(d', _) -> d == d') (nextRooms (room g)))
+startingRoom :: Room
+startingRoom    = addEnnemy (addLoot defaultRoom)
     where
-        extractMaybe (Just (_, r))  = Just (g { room = r })
-        extractMaybe Nothing      = Nothing
+        addLoot     = addNextRoom North 1
+        addEnnemy   = addNextRoom South 2
 
-searchRoom :: Game -> Game
-searchRoom (Game p r)   = Game (addItems p (loot r)) (r { loot = [] })
+lootRoom :: Room
+lootRoom    = addLoot defaultRoom
+    where
+        addLoot = addLootToRoom (IWeapon excalibur)
 
-isEnemies :: Game -> Bool
-isEnemies g    = not (null (enemies (room g)))
+enemyRoom :: Room
+enemyRoom  = addEnnemy defaultRoom
+    where
+        addEnnemy = addEnnemyToRoom goblin
 
+defaultRoomList :: List (Int, Room)
+defaultRoomList = List [(0, startingRoom), (1, lootRoom), (2, enemyRoom)]
+
+defaultGame :: Game
+defaultGame = Game newPlayer defaultRoom defaultRoomList

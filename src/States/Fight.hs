@@ -4,14 +4,15 @@ module States.Fight (
 
 import Game
 import Terminal
+import List
 import Enemies
 import Room
 import Player
 import System.Exit
 
-enemiesAttack :: Game -> [Enemy] -> (Game -> IO()) -> IO()
-enemiesAttack g [] next     = checkPlayerAlive g next
-enemiesAttack g (x:xs) next = printAttack >> enemiesAttack updatedGame xs next
+enemiesAttack :: Game -> List Enemy -> (Game -> IO()) -> IO()
+enemiesAttack g (List []) next      = checkPlayerAlive g next
+enemiesAttack g (List (x:xs)) next  = printAttack >> enemiesAttack updatedGame (List xs) next
     where
         updatedGame = g { player = enemyAttackPlayer x (player g) }
         printAttack = putStrLn ("You are attacked by " ++ enemyName x 
@@ -24,8 +25,8 @@ checkPlayerAlive g next
 
 checkEnemiesAttack :: Game -> (Game -> IO()) -> IO()
 checkEnemiesAttack g next
-    | isEnemies g   = enemiesAttack g (enemies (room g)) next
-    | otherwise     = next g
+    | isEnemies (room g)    = enemiesAttack g (enemies (room g)) next
+    | otherwise             = next g
 
 validateAttackAction :: Game -> Maybe Enemy -> (Game -> IO()) -> IO()
 validateAttackAction g Nothing next     = putStrLn "Enemy not found" >> fightLoop g next
@@ -37,18 +38,18 @@ validateAttackAction g (Just e) next    = putStrLn str >> checkEnemiesAttack upd
 
 applyAction :: Game -> (Game -> IO()) -> Maybe FightCommand -> IO()
 applyAction g n (Just (Attack name))
-    | enemyInRoom (room g) name     = validateAttackAction g (findEnemy (room g) name) n
-    | otherwise                     = putStrLn "Enemy not found" >> fightLoop g n
-applyAction g n (Just EnemyInfo)    = putStrLn "Here are the Enemies" >> listEnemies (enemies (room g)) >> fightLoop g n
-applyAction g n Nothing             = putStrLn "Command not found" >> fightLoop g n
+    | isEnnemyWithName (room g) name    = validateAttackAction g (findEnemyWithName (room g) name) n
+    | otherwise                         = putStrLn "Enemy not found" >> fightLoop g n
+applyAction g n (Just EnemyInfo)        = putStrLn "Here are the Enemies" >> listEnemies (enemies (room g)) >> fightLoop g n
+applyAction g n Nothing                 = putStrLn "Command not found" >> fightLoop g n
 
 fightLoop :: Game -> (Game -> IO()) -> IO()
 fightLoop g n
-    | isEnemies g  = getFightCommand (applyAction g n)
-    | otherwise     = putStrLn "You killed all enemies " >> n g
+    | isEnemies (room g)    = getFightCommand (applyAction g n)
+    | otherwise             = putStrLn "You killed all enemies " >> n g
 
 printStartFight :: Game -> IO()
-printStartFight g   = putStrLn ("You are fighting " ++ show (length e) ++ " Enemies") >> listEnemies e
+printStartFight g   = putStrLn ("You are fighting " ++ show (lengthList e) ++ " Enemies") >> listEnemies e
     where
         e = enemies (room g)
 
@@ -56,5 +57,6 @@ launchFight :: Game -> (Game -> IO()) -> IO()
 launchFight g n = printStartFight g >> fightLoop g n
 
 checkFight :: Game -> (Game -> IO()) -> IO()
-checkFight g next   | isEnemies g  = launchFight g next
-                    | otherwise     = next g
+checkFight g next
+    | isEnemies (room g)    = launchFight g next
+    | otherwise             = next g

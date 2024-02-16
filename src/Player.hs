@@ -1,7 +1,7 @@
 module Player (
     Player(..),
     newPlayer,
-    printPlayetrInventory,
+    printPlayerInventory,
     findWeaponByName,
     holdWeapon,
     playerDamage,
@@ -11,20 +11,20 @@ module Player (
 ) where
 
 import Item
-import Player.Inventory
+import List
 
 data Player = Player {
     playerHealth :: Int,
     playerName :: String,
     playerWeapon :: Maybe Weapon,
-    inventory :: Inventory Item
+    inventory :: List Item
 } deriving Show
 
 newPlayer :: Player
-newPlayer   = Player 20 "Hugo" (Just excalibur) (Inventory [])
+newPlayer   = Player 20 "Hugo" (Just excalibur) (List [])
 
-printPlayetrInventory :: Player -> IO()
-printPlayetrInventory p = printInventory (inventory p)
+printPlayerInventory :: Player -> IO()
+printPlayerInventory p = printList (inventory p) printItem
 
 holdWeapon :: Player -> Weapon -> Player
 holdWeapon p w  = p { playerWeapon = Just w }
@@ -33,7 +33,7 @@ extractWeaponName :: Weapon -> String
 extractWeaponName (WSword n)    = swordName n
 
 findWeaponByName :: Player -> String -> Maybe Weapon
-findWeaponByName p n    = unwrapItem (inventoryFind findWeapon (inventory p))
+findWeaponByName p n    = unwrapItem (findInList findWeapon (inventory p))
     where
         findWeapon (IWeapon x)          = n == extractWeaponName x
         unwrapItem (Just (IWeapon w))   = Just w
@@ -54,8 +54,8 @@ printPlayer :: Player -> IO()
 printPlayer p   = putStrLn "Here is your player datas"
     >> putStrLn ("Name: " ++ playerName p)
     >> putStrLn ("Health: " ++ show (playerHealth p))
-    >> putStrLn "Inventory: " >> printPlayetrInventory p
+    >> putStrLn "Inventory: " >> printPlayerInventory p
     >> putStrLn "Weapon: " >> printPlayerWeapon (playerWeapon p)
 
 addItems :: Player -> [Item] -> Player
-addItems p items    = p { inventory = foldr addInventory (inventory p) items }
+addItems p items    = p { inventory = foldr addList (inventory p) items }

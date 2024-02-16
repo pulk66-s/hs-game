@@ -9,7 +9,6 @@ import Item
 import Commands.Show
 import Commands.Move
 import Commands.Search
-import Map.Default
 
 tryHoldingWeapon :: Game -> Maybe Weapon -> (Game -> IO()) -> IO()
 tryHoldingWeapon g Nothing n    = putStrLn "You don't have that weapon" >> n g
@@ -27,9 +26,7 @@ evaluateCommand g Nothing   = putStrLn "Command not found" >> gameLoop g
 evaluateCommand g (Just c)  = understandCommand g c
 
 play :: IO()
-play    = gameLoop (Game newPlayer newRoom)
-    where
-        newRoom     = defaultRoom
+play    = gameLoop defaultGame
 
 gameLoop :: Game -> IO()
 gameLoop g  = printPrompt >> getLine >>= evaluateCommand g . parseCommand

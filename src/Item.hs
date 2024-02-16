@@ -6,7 +6,8 @@ module Item (
     rustySword,
     weaponDamage,
     printWeapon,
-    printItems
+    printItems,
+    printItem
 ) where
 
 data Sword = Sword {

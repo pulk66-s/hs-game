@@ -13,6 +13,7 @@ module Enemies (
 
 import Item
 import Player
+import List
 
 data Enemy = Enemy {
     enemyName :: String,
@@ -23,13 +24,12 @@ data Enemy = Enemy {
 goblin :: Enemy
 goblin  = Enemy "Goblin" 15 rustySword
 
-listEnemies :: [Enemy] -> IO()
-listEnemies [] = putStrLn "There is no Enemy"
-listEnemies e  = mapM_ printEnemy e
+listEnemies :: List Enemy -> IO()
+listEnemies (List [])   = putStrLn "There is no Enemy"
+listEnemies e           = printList e printEnemy
 
 printEnemy :: Enemy -> IO()
-printEnemy e   = putStr (enemyName e ++ " with " ++ show (enemyHealth e) ++ " health and a ")
-    >> printWeapon (enemyWeapon e) >> putStrLn ""
+printEnemy e    = putStrLn (enemyName e ++ " with " ++ show (enemyHealth e) ++ " health")
 
 dealDamageToEnemy :: Enemy -> Int -> Enemy
 dealDamageToEnemy e amount = e { enemyHealth = enemyHealth e - amount }
@@ -42,14 +42,11 @@ attackEnemy p e    = e { enemyHealth = enemyHealth e - playerAttack }
     where
         playerAttack    = playerDamage p
 
-updateEnemies :: [Enemy] -> Enemy -> [Enemy]
-updateEnemies [] _                  = []
-updateEnemies (x:xs) n
-    | enemyName x == enemyName n    = n : updateEnemies xs n
-    | otherwise                     = x : updateEnemies xs n
+updateEnemies :: List Enemy -> Enemy -> List Enemy
+updateEnemies l new = updateList l new (\x -> enemyName x == enemyName new)
 
-deleteDeadEnemies :: [Enemy] -> [Enemy]
-deleteDeadEnemies   = filter (not . isDead)
+deleteDeadEnemies :: List Enemy -> List Enemy
+deleteDeadEnemies (List e)  = List (filter (not . isDead) e)
 
 enemyDamage :: Enemy -> Int
 enemyDamage e   = weaponDamage (enemyWeapon e)
