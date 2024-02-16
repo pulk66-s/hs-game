@@ -36,6 +36,7 @@ library
       Map.Default
       MyList
       Player
+      Player.Inventory
       Room
       States.Fight
       Terminal
