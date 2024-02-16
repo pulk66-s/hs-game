@@ -11,9 +11,9 @@ import Player
 applyChanges :: Game -> Game
 applyChanges g  = updateRoom (updatePlayer g)
     where
-        updatePlayer g      = g { player = updateInventory (player g) }
+        updatePlayer g'     = g' { player = updateInventory (player g) }
         updateInventory p   = p { inventory = addList (inventory p) (loot (getRoom g)) }
-        updateRoom g        = g { room = updateLoot (room g) }
+        updateRoom g'       = g' { room = updateLoot (room g) }
         updateLoot (i, r)   = (i, r { loot = defaultList })
 
 searchCommand :: Game -> (Game -> IO()) -> IO()

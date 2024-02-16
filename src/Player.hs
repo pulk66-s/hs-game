@@ -7,7 +7,8 @@ module Player (
     playerDamage,
     playerIsDead,
     printPlayer,
-    addItems
+    addItems,
+    hasKey
 ) where
 
 import Item
@@ -36,6 +37,7 @@ findWeaponByName :: Player -> String -> Maybe Weapon
 findWeaponByName p n    = unwrapItem (findInList findWeapon (inventory p))
     where
         findWeapon (IWeapon x)          = n == extractWeaponName x
+        findWeapon _                    = False
         unwrapItem (Just (IWeapon w))   = Just w
         unwrapItem _                    = Nothing
 
@@ -62,3 +64,11 @@ printPlayer p   = do
 
 addItems :: Player -> [Item] -> Player
 addItems p items    = p { inventory = addList (inventory p) (List items) }
+
+hasKey :: Player -> Key -> Bool
+hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
+    Just _  -> True
+    Nothing -> False
+    where
+        checkGoodKey (IKey (Key n)) = n == name
+        checkGoodKey _              = False
