@@ -23,7 +23,8 @@ data Command =
 
 data FightCommand =
     Attack String   |
-    EnemyInfo
+    EnemyInfo       |
+    PlayerInfo
     deriving Show
 
 moveCommand :: String -> Maybe Command
@@ -53,10 +54,13 @@ parseFightCommand :: String -> Maybe FightCommand
 parseFightCommand cmd
     | startsWith "attack" cmd  = Just (Attack (drop 7 cmd))
 parseFightCommand "enemies"     = Just EnemyInfo
+parseFightCommand "player"      = Just PlayerInfo
 parseFightCommand _             = Nothing
 
-getFightCommand :: (Maybe FightCommand -> IO()) -> IO()
-getFightCommand next    = printPrompt >> getLine >>= next . parseFightCommand
+getFightCommand ::  IO (Maybe FightCommand)
+getFightCommand = do
+    printPrompt
+    parseFightCommand <$> getLine
 
 printPrompt :: IO()
 printPrompt = putStrLn "===" >> putStrLn "Enter your command" >>

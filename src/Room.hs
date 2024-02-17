@@ -5,10 +5,7 @@ module Room (
     addLootToRoom,
     addEnnemyToRoom,
     addNextRoom,
-    isEnemies,
-    isEnnemyWithName,
     printRoom,
-    findEnemyWithName,
     isNextRoom,
     printDirection,
     addKeyToRoom
@@ -45,17 +42,6 @@ addEnnemyToRoom x r   = r { enemies = addElem x (enemies r) }
 
 addNextRoom :: Direction -> Int -> Room -> Room
 addNextRoom d i r   = r { nextRooms = addElem (d, i) (nextRooms r) }
-
-isEnemies :: Room -> Bool
-isEnemies r = not (isEmpty (enemies r))
-
-findEnemyWithName :: Room -> String -> Maybe Enemy
-findEnemyWithName r name    = findInList (\x -> enemyName x == name) (enemies r)
-
-isEnnemyWithName :: Room -> String -> Bool
-isEnnemyWithName r n    = case findEnemyWithName r n of
-    Just _  -> True
-    Nothing -> False
 
 printRoomLoot :: Room -> IO()
 printRoomLoot r | isEmpty (loot r) = putStr ""

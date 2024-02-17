@@ -8,7 +8,8 @@ module Enemies (
     attackEnemy,
     deleteDeadEnemies,
     enemyAttackPlayer,
-    enemyDamage
+    enemyDamage,
+    enemyIsDead
 ) where
 
 import Item
@@ -34,8 +35,8 @@ printEnemy e    = putStrLn (enemyName e ++ " with " ++ show (enemyHealth e) ++ "
 dealDamageToEnemy :: Enemy -> Int -> Enemy
 dealDamageToEnemy e amount = e { enemyHealth = enemyHealth e - amount }
 
-isDead :: Enemy -> Bool
-isDead e    = enemyHealth e <= 0
+enemyIsDead :: Enemy -> Bool
+enemyIsDead e    = enemyHealth e <= 0
 
 attackEnemy :: Player -> Enemy -> Enemy
 attackEnemy p e    = e { enemyHealth = enemyHealth e - playerAttack }
@@ -46,7 +47,7 @@ updateEnemies :: List Enemy -> Enemy -> List Enemy
 updateEnemies l new = updateList l new (\x -> enemyName x == enemyName new)
 
 deleteDeadEnemies :: List Enemy -> List Enemy
-deleteDeadEnemies (List e)  = List (filter (not . isDead) e)
+deleteDeadEnemies (List e)  = List (filter (not . enemyIsDead) e)
 
 enemyDamage :: Enemy -> Int
 enemyDamage e   = weaponDamage (enemyWeapon e)

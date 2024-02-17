@@ -25,7 +25,7 @@ newPlayer :: Player
 newPlayer   = Player 20 "Hugo" Nothing (List [])
 
 printPlayerInventory :: Player -> IO()
-printPlayerInventory p = printList (inventory p) printItem
+printPlayerInventory p = printList (inventory p) (\x -> printItem x >> putStrLn "")
 
 holdWeapon :: Player -> Weapon -> Player
 holdWeapon p w  = p { playerWeapon = Just w }

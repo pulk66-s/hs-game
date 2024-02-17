@@ -39,6 +39,7 @@ library
       Player
       Room
       States.Fight
+      States.OldFight
       Terminal
   other-modules:
       Paths_game
