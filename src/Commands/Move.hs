@@ -5,7 +5,6 @@ module Commands.Move (
 import Game
 import Room
 import States.Fight
-import List
 import Move
 
 moveCommand :: Game -> Direction -> (Game -> IO()) -> IO()

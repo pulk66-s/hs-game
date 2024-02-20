@@ -25,7 +25,6 @@ source-repository head
 
 library
   exposed-modules:
-      Base
       Commands.Move
       Commands.Search
       Commands.Show

@@ -60,9 +60,9 @@ getRoom :: Game -> Room
 getRoom g = snd (room g)
 
 updateRoom :: Game -> (Int, Room) -> Game
-updateRoom game room    = game { room = room }
+updateRoom game r   = game { room = r }
 
 saveCurrentRoom :: Game -> Game
-saveCurrentRoom game   = game { rooms = updateList (rooms game) (room game) (filter (room game)) }
+saveCurrentRoom game   = game { rooms = updateList (rooms game) (room game) (f (room game)) }
     where
-        filter (i, _) (i', _) = i == i'
+        f (i, _) (i', _)    = i == i'

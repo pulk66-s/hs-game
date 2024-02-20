@@ -9,11 +9,6 @@ import Player
 import Terminal
 import List
 
-printStartFight :: Game -> IO()
-printStartFight game    = do
-    putStrLn "You are attacked !"
-    putStrLn "Here are the enemies:"
-
 applyAttack :: Game -> String -> IO Game
 applyAttack game name   = case findInList nameFilter (enemies (getRoom game)) of
     Just enemy  -> do
@@ -53,10 +48,10 @@ evaluateFightCommand game (Just PlayerInfo)     = do
 
 fightLoop :: Game -> IO Game
 fightLoop game  = case enemies (getRoom game) of
-    List []         -> do
+    List [] -> do
         putStrLn "You killed all enemies"
         return game
-    List enemies    -> do
+    List _  -> do
         putStrLn "\nWhat do you want to do ?"
         cmd     <- getFightCommand
         game'   <- evaluateFightCommand game cmd
@@ -65,10 +60,10 @@ fightLoop game  = case enemies (getRoom game) of
 
 checkFight :: Game -> (Game -> IO()) -> IO()
 checkFight game next    = case enemies (getRoom game) of
-    List []         -> next game
-    List enemies    -> do
+    List [] -> next game
+    List e  -> do
         putStrLn "You are attacked !"
         putStrLn "Here are the enemies:"
-        listEnemies (List enemies)
-        game <- fightLoop game
-        next game
+        listEnemies (List e)
+        game'   <- fightLoop game
+        next game'
