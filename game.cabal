@@ -29,6 +29,7 @@ library
       Commands.Move
       Commands.Search
       Commands.Show
+      Dice
       Enemies
       Game
       Item
@@ -39,7 +40,6 @@ library
       Player
       Room
       States.Fight
-      States.OldFight
       Terminal
   other-modules:
       Paths_game
@@ -50,6 +50,7 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable game-exe
@@ -64,6 +65,7 @@ executable game-exe
   build-depends:
       base >=4.7 && <5
     , game
+    , random
   default-language: Haskell2010
 
 test-suite game-test
@@ -79,4 +81,5 @@ test-suite game-test
   build-depends:
       base >=4.7 && <5
     , game
+    , random
   default-language: Haskell2010
