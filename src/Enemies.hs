@@ -9,21 +9,32 @@ module Enemies (
     deleteDeadEnemies,
     enemyAttackPlayer,
     enemyDamage,
-    enemyIsDead
+    enemyIsDead,
+    enemyStrengthStat
 ) where
 
 import Item
 import Player
 import List
 
+data EnemyStatistic = EnemyStatistic {
+    enemyStrength :: Int,
+    enemyDexterity :: Int,
+    enemyIntelligence :: Int
+} deriving Show
+
 data Enemy = Enemy {
     enemyName :: String,
     enemyHealth :: Int,
-    enemyWeapon :: Weapon
+    enemyWeapon :: Weapon,
+    enemyStatistic :: EnemyStatistic
 } deriving Show
 
+defaultEnemyStatistic :: EnemyStatistic
+defaultEnemyStatistic  = EnemyStatistic 10 10 10
+
 goblin :: Enemy
-goblin  = Enemy "Goblin" 15 rustySword
+goblin  = Enemy "Goblin" 15 rustySword defaultEnemyStatistic
 
 listEnemies :: List Enemy -> IO()
 listEnemies (List [])   = putStrLn "There is no Enemy"
@@ -54,3 +65,6 @@ enemyDamage e   = weaponDamage (enemyWeapon e)
 
 enemyAttackPlayer :: Enemy -> Player -> Player
 enemyAttackPlayer e p  = p { playerHealth = playerHealth p - enemyDamage e }
+
+enemyStrengthStat :: Enemy -> Int
+enemyStrengthStat enemy = enemyStrength (enemyStatistic enemy)

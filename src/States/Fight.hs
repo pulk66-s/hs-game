@@ -33,7 +33,7 @@ launchAttackSuccess game name  = do
         List [] -> return game'
         List e  -> do
             putStrLn "Enemies are attacking you"
-            return (enemiesAttack game' e)
+            enemiesAttack game' e
 
 launchAttackFailure :: Game -> IO Game
 launchAttackFailure game    = do
@@ -48,8 +48,21 @@ launchAttack game name  = do
         then launchAttackSuccess game name
         else launchAttackFailure game
 
-enemiesAttack :: Game -> [Enemy] -> Game
-enemiesAttack   = foldl (\g e -> g { player = enemyAttackPlayer e (player g) }) 
+enemiesAttack :: Game -> [Enemy] -> IO Game
+-- enemiesAttack   = foldl (\g e -> g { player = enemyAttackPlayer e (player g) }) 
+enemiesAttack game enemies  = enemiesDices game enemies
+    where
+        enemiesDices game []        = return game
+        enemiesDices game (x:xs)    = do
+            diceRoll    <- randomDice 20
+            putStrLn ("Enemy " ++ enemyName x ++ " rolled a " ++ show diceRoll)
+            if diceRoll >= enemyStrengthStat x
+                then do
+                    putStrLn ("Enemy " ++ enemyName x ++ " hit you")
+                    enemiesDices (game { player = enemyAttackPlayer x (player game) }) xs
+                else do
+                    putStrLn ("Enemy " ++ enemyName x ++ " missed his attack")
+                    enemiesDices game xs
 
 evaluateFightCommand :: Game -> Maybe FightCommand -> IO Game
 evaluateFightCommand game Nothing                   = do
