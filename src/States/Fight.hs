@@ -8,6 +8,9 @@ import Enemies
 import Player
 import Terminal
 import Item
+import Item.Weapon
+import Item.Consumable
+import Item.Key
 import List
 import Dice
 

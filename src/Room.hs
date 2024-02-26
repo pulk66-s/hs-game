@@ -12,6 +12,7 @@ module Room (
 ) where
 
 import Item
+import Item.Key
 import Enemies
 import List
 

@@ -11,6 +11,9 @@ import Player
 import Room
 import Enemies
 import Item
+import Item.Consumable
+import Item.Weapon
+import Item.Key
 import List
 
 data Game = Game {

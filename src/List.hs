@@ -8,7 +8,9 @@ module List (
     isEmpty,
     updateList,
     lengthList,
-    addElem
+    addElem,
+    startsWith,
+    find
 ) where
 
 newtype List a = List [a] deriving Show
@@ -48,3 +50,15 @@ updateList (List xs) new eq = List (map (checkElem eq new) xs)
 
 lengthList :: List a -> Int
 lengthList (List xs) = length xs
+
+startsWith :: Eq a => [a] -> [a] -> Bool
+startsWith [] _                         = True
+startsWith _ []                         = False
+startsWith (x:xs) (y:ys)    | x == y    = startsWith xs ys
+                            | otherwise = False
+
+find :: (a -> Bool) -> [a] -> Maybe a
+find _ []                   = Nothing
+find f (x:xs)   | f x       = Just x
+                | otherwise = find f xs
+

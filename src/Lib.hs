@@ -6,6 +6,7 @@ import Game
 import Terminal
 import Player
 import Item
+import Item.Weapon
 import Commands.Show
 import Commands.Move
 import Commands.Search

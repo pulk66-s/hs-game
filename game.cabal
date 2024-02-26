@@ -32,11 +32,16 @@ library
       Enemies
       Game
       Item
+      Item.Consumable
+      Item.Key
+      Item.Weapon
       Lib
       List
       Move
-      MyList
       Player
+      Player.Data
+      Player.Inventory
+      Player.Statistics
       Room
       States.Fight
       Terminal

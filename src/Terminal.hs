@@ -7,7 +7,7 @@ module Terminal (
 ) where
 
 import Room
-import MyList
+import List
 import System.IO
 
 data Command =

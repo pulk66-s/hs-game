@@ -1,43 +1,27 @@
 module Player (
     Player(..),
     newPlayer,
-    printPlayerInventory,
     findWeaponByName,
     holdWeapon,
     playerDamage,
     playerIsDead,
     printPlayer,
-    addItems,
     hasKey,
     strengthStat,
     playerUseItemInFight
 ) where
 
 import Item
+import Item.Weapon
+import Item.Key
+import Item.Consumable
 import List
-
-data PlayerStatistic = PlayerStatistic {
-    playerStrength :: Int,
-    playerDexterity :: Int,
-    playerIntelligence :: Int
-} deriving Show
-
-data Player = Player {
-    playerHealth :: Int,
-    playerName :: String,
-    playerWeapon :: Maybe Weapon,
-    inventory :: List Item,
-    playerStatistic :: PlayerStatistic
-} deriving Show
-
-defaultPlayerStatistic :: PlayerStatistic
-defaultPlayerStatistic  = PlayerStatistic 10 10 10
+import Player.Inventory
+import Player.Data
+import Player.Statistics
 
 newPlayer :: Player
 newPlayer   = Player 20 "Hugo" Nothing (List []) defaultPlayerStatistic
-
-printPlayerInventory :: Player -> IO()
-printPlayerInventory p = printList (inventory p) (\x -> printItem x >> putStrLn "")
 
 holdWeapon :: Player -> Weapon -> Player
 holdWeapon p w  = p { playerWeapon = Just w }
@@ -76,9 +60,6 @@ printPlayer p   = do
     putStrLn "\nWeapon: "
     printPlayerWeapon (playerWeapon p)
 
-addItems :: Player -> [Item] -> Player
-addItems p items    = p { inventory = addList (inventory p) (List items) }
-
 hasKey :: Player -> Key -> Bool
 hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
     Just _  -> True
@@ -86,9 +67,6 @@ hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
     where
         checkGoodKey (IKey (Key n)) = n == name
         checkGoodKey _              = False
-
-strengthStat :: Player -> Int
-strengthStat p  = playerStrength (playerStatistic p)
 
 useConsumable :: Player -> Consumable -> Player
 useConsumable player (CHealth p) = player {

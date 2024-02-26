@@ -13,7 +13,7 @@ module Enemies (
     enemyStrengthStat
 ) where
 
-import Item
+import Item.Weapon
 import Player
 import List
 
