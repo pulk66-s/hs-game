@@ -26,28 +26,29 @@ applyAttack game name   = case findInList nameFilter (enemies (getRoom game)) of
     where
         nameFilter e    = enemyName e == name
 
+checkStillEnemies :: Game -> List Enemy -> IO Game
+checkStillEnemies game (List [])        = return game
+checkStillEnemies game (List enemies)   = do
+    putStrLn "Enemies are attacking you"
+    enemiesAttack game enemies
+
 launchAttackSuccess :: Game -> String -> IO Game
 launchAttackSuccess game name  = do
     game'   <- applyAttack game name
-    case enemies (getRoom game') of
-        List [] -> return game'
-        List e  -> do
-            putStrLn "Enemies are attacking you"
-            enemiesAttack game' e
+    checkStillEnemies game' (enemies (getRoom game'))
 
 launchAttackFailure :: Game -> IO Game
 launchAttackFailure game    = do
     putStrLn "You missed your attack"
-    case enemies (getRoom game) of
-        List [] -> return game
-        List e  -> do
-            putStrLn "Enemies are attacking you"
-            enemiesAttack game e
+    checkStillEnemies game (enemies (getRoom game))
+
+checkStrengthRoll :: Game -> String -> Int -> IO Game
+checkStrengthRoll game name roll
+    | roll >= strengthStat (player game)    = launchAttackSuccess game name
+    | otherwise                             = launchAttackFailure game
 
 launchPlayerAttack :: Game -> String -> IO Game
 launchPlayerAttack game name  = do
     diceRoll    <- randomDice 20
     putStrLn ("You rolled a " ++ show diceRoll)
-    if diceRoll >= strengthStat (player game)
-        then launchAttackSuccess game name
-        else launchAttackFailure game
+    checkStrengthRoll game name diceRoll

@@ -34,24 +34,3 @@ useItemInFight game name    = isItemInInventory game (
     )
     where
         playerInventory = inventory (player game)
--- useItemInFight game name    = case findInList nameFilter (inventory (player game)) of
---     Just item   -> do
---         checkItemUsage game (playerUseItemInFight (player game) item)
---         case enemies (getRoom game) of
---             List [] -> return game
---             List e  -> do
---                 putStrLn "Enemies are attacking you"
---                 enemiesAttack game e
---     Nothing     -> do
---         putStrLn "Item not found"
---         return game
---     where
---         nameFilter (IWeapon (WSword s))         = swordName s == name
---         nameFilter (IConsumable (CHealth p))    = healthPotionName p == name
---         nameFilter (IKey (Key k))               = k == name
---         checkItemUsage game' (Just p)   = do
---             putStrLn ("You used " ++ name ++ " item")
---             return game' { player = p }
---         checkItemUsage game' Nothing     = do
---             putStrLn "You can't use this item"
---             return game'
