@@ -8,7 +8,8 @@ module Item (
     weaponDamage,
     printWeapon,
     printItems,
-    printItem
+    printItem,
+    littleHealthPotion
 ) where
 
 data Sword = Sword {
@@ -37,6 +38,9 @@ excalibur = WSword (Sword "Excalibur" 10)
 rustySword :: Weapon
 rustySword = WSword (Sword "Rusty Sword" 5)
 
+littleHealthPotion :: Consumable
+littleHealthPotion = CHealth 5
+
 weaponDamage :: Weapon -> Int
 weaponDamage (WSword s) = damage s
 
@@ -44,10 +48,10 @@ printWeapon :: Weapon -> IO()
 printWeapon (WSword s)  = putStr (swordName s ++ " with " ++ show (damage s) ++ " damage")
 
 printKey :: Key -> IO()
-printKey (Key k) = putStrLn k
+printKey (Key k) = putStr k
 
 printConsumable :: Consumable -> IO()
-printConsumable (CHealth h) = putStrLn ("Health potion with " ++ show h ++ " health")
+printConsumable (CHealth h) = putStr ("Health potion with " ++ show h ++ " health")
 
 printItem :: Item -> IO()
 printItem (IWeapon w)       = printWeapon w

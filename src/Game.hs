@@ -29,7 +29,7 @@ startingRoom    = addEndRoom (addEnnemy (addLoot defaultRoom))
 lootRoom :: Room
 lootRoom    = addStartingRoom (addLoot defaultRoom)
     where
-        addLoot         = addLootToRoom (IWeapon excalibur)
+        addLoot r       = addLootToRoom (IConsumable littleHealthPotion) (addLootToRoom (IWeapon excalibur) r)
         addStartingRoom = addNextRoom South 0
 
 enemyRoom :: Room

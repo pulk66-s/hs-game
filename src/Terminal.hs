@@ -18,13 +18,15 @@ data Command =
     Search              |
     ShowInventory       |
     HoldWeapon String   |
-    PlayerData          
+    PlayerData          |
+    UseItem String
     deriving Show
 
 data FightCommand =
-    Attack String   |
-    EnemyInfo       |
-    PlayerInfo
+    Attack String       |
+    EnemyInfo           |
+    PlayerInfo          |
+    UseItemFight String
     deriving Show
 
 moveCommand :: String -> Maybe Command

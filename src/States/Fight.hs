@@ -29,21 +29,24 @@ enemiesAttack :: Game -> [Enemy] -> Game
 enemiesAttack   = foldl (\g e -> g { player = enemyAttackPlayer e (player g) }) 
 
 evaluateFightCommand :: Game -> Maybe FightCommand -> IO Game
-evaluateFightCommand game Nothing               = do
+evaluateFightCommand game Nothing                   = do
     putStrLn "Command not found"
     return game
-evaluateFightCommand game (Just (Attack name))  = do
+evaluateFightCommand game (Just (Attack name))      = do
     game'   <- applyAttack game name
     case enemies (getRoom game') of
         List [] -> return game'
         List e  -> do
             putStrLn "Enemies are attacking you"
             return (enemiesAttack game' e)
-evaluateFightCommand game (Just EnemyInfo)      = do
+evaluateFightCommand game (Just EnemyInfo)          = do
     listEnemies (enemies (getRoom game))
     return game
-evaluateFightCommand game (Just PlayerInfo)     = do
+evaluateFightCommand game (Just PlayerInfo)         = do
     printPlayer (player game)
+    return game
+evaluateFightCommand game (Just (UseItemFight _))   = do
+    putStrLn "You can't use items in a fight"
     return game
 
 fightLoop :: Game -> IO Game
