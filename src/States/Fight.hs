@@ -8,6 +8,7 @@ import Enemies
 import Player
 import Terminal
 import List
+import Dice
 
 applyAttack :: Game -> String -> IO Game
 applyAttack game name   = case findInList nameFilter (enemies (getRoom game)) of
@@ -25,6 +26,28 @@ applyAttack game name   = case findInList nameFilter (enemies (getRoom game)) of
     where
         nameFilter e    = enemyName e == name
 
+launchAttackSuccess :: Game -> String -> IO Game
+launchAttackSuccess game name  = do
+    game'   <- applyAttack game name
+    case enemies (getRoom game') of
+        List [] -> return game'
+        List e  -> do
+            putStrLn "Enemies are attacking you"
+            return (enemiesAttack game' e)
+
+launchAttackFailure :: Game -> IO Game
+launchAttackFailure game    = do
+    putStrLn "You missed your attack"
+    return game
+
+launchAttack :: Game -> String -> IO Game
+launchAttack game name  = do
+    diceRoll    <- randomDice 20
+    putStrLn ("You rolled a " ++ show diceRoll)
+    if diceRoll >= strengthStat (player game)
+        then launchAttackSuccess game name
+        else launchAttackFailure game
+
 enemiesAttack :: Game -> [Enemy] -> Game
 enemiesAttack   = foldl (\g e -> g { player = enemyAttackPlayer e (player g) }) 
 
@@ -32,13 +55,7 @@ evaluateFightCommand :: Game -> Maybe FightCommand -> IO Game
 evaluateFightCommand game Nothing                   = do
     putStrLn "Command not found"
     return game
-evaluateFightCommand game (Just (Attack name))      = do
-    game'   <- applyAttack game name
-    case enemies (getRoom game') of
-        List [] -> return game'
-        List e  -> do
-            putStrLn "Enemies are attacking you"
-            return (enemiesAttack game' e)
+evaluateFightCommand game (Just (Attack name))      = launchAttack game name
 evaluateFightCommand game (Just EnemyInfo)          = do
     listEnemies (enemies (getRoom game))
     return game
@@ -59,7 +76,6 @@ fightLoop game  = case enemies (getRoom game) of
         cmd     <- getFightCommand
         game'   <- evaluateFightCommand game cmd
         fightLoop game'
-
 
 checkFight :: Game -> (Game -> IO()) -> IO()
 checkFight game next    = case enemies (getRoom game) of

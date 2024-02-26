@@ -8,21 +8,32 @@ module Player (
     playerIsDead,
     printPlayer,
     addItems,
-    hasKey
+    hasKey,
+    strengthStat
 ) where
 
 import Item
 import List
 
+data PlayerStatistic = PlayerStatistic {
+    playerStrength :: Int,
+    playerDexterity :: Int,
+    playerIntelligence :: Int
+} deriving Show
+
 data Player = Player {
     playerHealth :: Int,
     playerName :: String,
     playerWeapon :: Maybe Weapon,
-    inventory :: List Item
+    inventory :: List Item,
+    playerStatistic :: PlayerStatistic
 } deriving Show
 
+defaultPlayerStatistic :: PlayerStatistic
+defaultPlayerStatistic  = PlayerStatistic 10 10 10
+
 newPlayer :: Player
-newPlayer   = Player 20 "Hugo" Nothing (List [])
+newPlayer   = Player 20 "Hugo" Nothing (List []) defaultPlayerStatistic
 
 printPlayerInventory :: Player -> IO()
 printPlayerInventory p = printList (inventory p) (\x -> printItem x >> putStrLn "")
@@ -42,8 +53,10 @@ findWeaponByName p n    = unwrapItem (findInList findWeapon (inventory p))
         unwrapItem _                    = Nothing
 
 playerDamage :: Player -> Int
-playerDamage (Player _ _ Nothing _)     = 1
-playerDamage (Player _ _ (Just w) _)    = weaponDamage w
+playerDamage p  = getDmg (playerWeapon p)
+    where
+        getDmg Nothing  = 1
+        getDmg (Just w) = weaponDamage w
 
 playerIsDead :: Player -> Bool
 playerIsDead p  = playerHealth p <= 0
@@ -72,3 +85,6 @@ hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
     where
         checkGoodKey (IKey (Key n)) = n == name
         checkGoodKey _              = False
+
+strengthStat :: Player -> Int
+strengthStat p  = playerStrength (playerStatistic p)
