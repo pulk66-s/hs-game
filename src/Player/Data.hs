@@ -15,6 +15,7 @@ data PlayerStatistic = PlayerStatistic {
 
 data Player = Player {
     playerHealth :: Int,
+    playerMaxHealth :: Int,
     playerName :: String,
     playerWeapon :: Maybe Weapon,
     inventory :: List Item,

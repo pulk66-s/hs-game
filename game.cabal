@@ -44,6 +44,11 @@ library
       Player.Statistics
       Room
       States.Fight
+      States.Fight.Command
+      States.Fight.EnemyAttack
+      States.Fight.ItemUse
+      States.Fight.PlayerAttack
+      States.OldFight
       Terminal
   other-modules:
       Paths_game

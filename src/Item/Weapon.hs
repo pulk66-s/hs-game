@@ -4,7 +4,8 @@ module Item.Weapon (
     excalibur,
     rustySword,
     weaponDamage,
-    printWeapon
+    printWeapon,
+    weaponName
 ) where
 
 data Sword = Sword {
@@ -28,3 +29,10 @@ weaponName (WSword s) = swordName s
 
 printWeapon :: Weapon -> IO()
 printWeapon w   = putStr (weaponName w ++ " with " ++ show (weaponDamage w) ++ " damage")
+
+instance Eq Sword where
+    (==) (Sword n1 d1) (Sword n2 d2) = n1 == n2
+
+instance Eq Weapon where
+    (==) (WSword s1) (WSword s2) = s1 == s2
+    (==) _ _                      = False

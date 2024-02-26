@@ -7,8 +7,7 @@ module Player (
     playerIsDead,
     printPlayer,
     hasKey,
-    strengthStat,
-    playerUseItemInFight
+    strengthStat
 ) where
 
 import Item
@@ -21,7 +20,7 @@ import Player.Data
 import Player.Statistics
 
 newPlayer :: Player
-newPlayer   = Player 20 "Hugo" Nothing (List []) defaultPlayerStatistic
+newPlayer   = Player 20 20 "Hugo" Nothing (List []) defaultPlayerStatistic 
 
 holdWeapon :: Player -> Weapon -> Player
 holdWeapon p w  = p { playerWeapon = Just w }
@@ -67,12 +66,3 @@ hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
     where
         checkGoodKey (IKey (Key n)) = n == name
         checkGoodKey _              = False
-
-useConsumable :: Player -> Consumable -> Player
-useConsumable player (CHealth p) = player {
-    playerHealth = playerHealth player + healthPotionHealAmount p
-}
-
-playerUseItemInFight :: Player -> Item -> Maybe Player
-playerUseItemInFight player (IConsumable consumable)  = Just (useConsumable player consumable)
-playerUseItemInFight _ _                              = Nothing

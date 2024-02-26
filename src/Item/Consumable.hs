@@ -3,7 +3,8 @@ module Item.Consumable (
     HealthPotion(..),
     printConsumable,
     printHealthPotion,
-    littleHealthPotion
+    littleHealthPotion,
+    consumableName
 ) where
 
 data HealthPotion = HealthPotion {
@@ -24,7 +25,16 @@ printHealthPotion potion    = do
     putStrLn " health"
 
 printConsumable :: Consumable -> IO()
--- printConsumable (CHealth h) = putStr ("Health potion with " ++ show h ++ " health")
 printConsumable (CHealth h) = do
     putStr "Health potion: "
     printHealthPotion h
+
+consumableName :: Consumable -> String
+consumableName (CHealth h) = healthPotionName h
+
+instance Eq HealthPotion where
+    (==) (HealthPotion n1 h1) (HealthPotion n2 h2) = n1 == n2 && h1 == h2
+
+instance Eq Consumable where
+    (==) (CHealth h1) (CHealth h2) = h1 == h2
+    (==) _ _                        = False

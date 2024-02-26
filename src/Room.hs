@@ -8,7 +8,8 @@ module Room (
     printRoom,
     isNextRoom,
     printDirection,
-    addKeyToRoom
+    addKeyToRoom,
+    roomHasEnemies
 ) where
 
 import Item
@@ -67,3 +68,6 @@ printRoom r = do
 
 addKeyToRoom :: Key -> Room -> Room
 addKeyToRoom k r    = r { key = Just k }
+
+roomHasEnemies :: Room -> Bool
+roomHasEnemies r    = not (isEmpty (enemies r))
