@@ -20,14 +20,14 @@ data Command =
     HoldWeapon String   |
     PlayerData          |
     UseItem String
-    deriving Show
+    
 
 data FightCommand =
     Attack String       |
     EnemyInfo           |
     PlayerInfo          |
     UseItemFight String
-    deriving Show
+    
 
 moveCommand :: String -> Maybe Command
 moveCommand "N"     = Just (Move North)

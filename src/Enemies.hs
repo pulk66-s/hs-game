@@ -21,14 +21,14 @@ data EnemyStatistic = EnemyStatistic {
     enemyStrength :: Int,
     enemyDexterity :: Int,
     enemyIntelligence :: Int
-} deriving Show
+} 
 
 data Enemy = Enemy {
     enemyName :: String,
     enemyHealth :: Int,
     enemyWeapon :: Weapon,
     enemyStatistic :: EnemyStatistic
-} deriving Show
+} 
 
 defaultEnemyStatistic :: EnemyStatistic
 defaultEnemyStatistic  = EnemyStatistic 10 10 10

@@ -11,7 +11,7 @@ data PlayerStatistic = PlayerStatistic {
     playerStrength :: Int,
     playerDexterity :: Int,
     playerIntelligence :: Int
-} deriving Show
+} 
 
 data Player = Player {
     playerHealth :: Int,
@@ -19,4 +19,4 @@ data Player = Player {
     playerWeapon :: Maybe Weapon,
     inventory :: List Item,
     playerStatistic :: PlayerStatistic
-} deriving Show
+} 

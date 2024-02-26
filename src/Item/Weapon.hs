@@ -9,11 +9,10 @@ module Item.Weapon (
 
 data Sword = Sword {
     swordName :: String,
-    damage :: Int
-} deriving Show
+    swordDamage :: Int
+} 
 
 newtype Weapon = WSword Sword
-    deriving Show
 
 excalibur :: Weapon
 excalibur = WSword (Sword "Excalibur" 10)
@@ -22,7 +21,10 @@ rustySword :: Weapon
 rustySword = WSword (Sword "Rusty Sword" 5)
 
 weaponDamage :: Weapon -> Int
-weaponDamage (WSword s) = damage s
+weaponDamage (WSword s) = swordDamage s
+
+weaponName :: Weapon -> String
+weaponName (WSword s) = swordName s
 
 printWeapon :: Weapon -> IO()
-printWeapon (WSword s)  = putStr (swordName s ++ " with " ++ show (damage s) ++ " damage")
+printWeapon w   = putStr (weaponName w ++ " with " ++ show (weaponDamage w) ++ " damage")

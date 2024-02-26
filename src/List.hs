@@ -13,7 +13,7 @@ module List (
     find
 ) where
 
-newtype List a = List [a] deriving Show
+newtype List a = List [a] 
 
 defaultList :: List a
 defaultList = List []

@@ -24,7 +24,7 @@ data Room = Room {
     loot :: List Item,
     enemies :: List Enemy,
     key :: Maybe Key
-} deriving Show
+} 
 
 printDirection :: Direction -> IO()
 printDirection North    = putStrLn "North"

@@ -12,7 +12,7 @@ data Item =
     IWeapon Weapon          |
     IKey Key                |
     IConsumable Consumable
-    deriving Show
+    
 
 printItem :: Item -> IO()
 printItem (IWeapon w)       = printWeapon w

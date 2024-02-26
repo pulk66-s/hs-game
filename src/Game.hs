@@ -20,7 +20,7 @@ data Game = Game {
     player :: Player,
     room :: (Int, Room),
     rooms :: List (Int, Room)
-} deriving Show
+} 
 
 startingRoom :: Room
 startingRoom    = addEndRoom (addEnnemy (addLoot defaultRoom))

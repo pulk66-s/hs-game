@@ -13,7 +13,11 @@ import Commands.Search
 
 tryHoldingWeapon :: Game -> Maybe Weapon -> (Game -> IO()) -> IO()
 tryHoldingWeapon g Nothing n    = putStrLn "You don't have that weapon" >> n g
-tryHoldingWeapon g (Just w) n   = putStrLn ("You are now holding " ++ show w) >> n (g { player = holdWeapon (player g) w})
+-- tryHoldingWeapon g (Just w) n   = putStrLn ("You are now holding " ++ show w) >> n (g { player = holdWeapon (player g) w})
+tryHoldingWeapon g (Just w) n   = do
+    putStr "You are now holding: "
+    printWeapon w
+    n (g { player = holdWeapon (player g) w})
 
 understandCommand :: Game -> Command -> IO()
 understandCommand _ Exit            = putStrLn "Goodbye"
