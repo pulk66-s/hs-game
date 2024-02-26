@@ -7,6 +7,7 @@ import Room
 import Enemies
 import Player
 import Terminal
+import Item
 import List
 import Dice
 
@@ -38,7 +39,11 @@ launchAttackSuccess game name  = do
 launchAttackFailure :: Game -> IO Game
 launchAttackFailure game    = do
     putStrLn "You missed your attack"
-    return game
+    case enemies (getRoom game) of
+        List [] -> return game
+        List e  -> do
+            putStrLn "Enemies are attacking you"
+            enemiesAttack game e
 
 launchAttack :: Game -> String -> IO Game
 launchAttack game name  = do
@@ -49,7 +54,6 @@ launchAttack game name  = do
         else launchAttackFailure game
 
 enemiesAttack :: Game -> [Enemy] -> IO Game
--- enemiesAttack   = foldl (\g e -> g { player = enemyAttackPlayer e (player g) }) 
 enemiesAttack game enemies  = enemiesDices game enemies
     where
         enemiesDices game []        = return game
@@ -64,20 +68,41 @@ enemiesAttack game enemies  = enemiesDices game enemies
                     putStrLn ("Enemy " ++ enemyName x ++ " missed his attack")
                     enemiesDices game xs
 
+useItemInFight :: Game -> String -> IO Game
+useItemInFight game name    = case findInList nameFilter (inventory (player game)) of
+    Just item   -> do
+        checkItemUsage game (playerUseItemInFight (player game) item)
+        case enemies (getRoom game) of
+            List [] -> return game
+            List e  -> do
+                putStrLn "Enemies are attacking you"
+                enemiesAttack game e
+    Nothing     -> do
+        putStrLn "Item not found"
+        return game
+    where
+        nameFilter (IWeapon (WSword s))         = swordName s == name
+        nameFilter (IConsumable (CHealth p))    = healthPotionName p == name
+        nameFilter (IKey (Key k))               = k == name
+        checkItemUsage game' (Just p)   = do
+            putStrLn ("You used " ++ name ++ " item")
+            return game' { player = p }
+        checkItemUsage game' Nothing     = do
+            putStrLn "You can't use this item"
+            return game'
+
 evaluateFightCommand :: Game -> Maybe FightCommand -> IO Game
-evaluateFightCommand game Nothing                   = do
+evaluateFightCommand game Nothing                       = do
     putStrLn "Command not found"
     return game
 evaluateFightCommand game (Just (Attack name))      = launchAttack game name
-evaluateFightCommand game (Just EnemyInfo)          = do
+evaluateFightCommand game (Just EnemyInfo)              = do
     listEnemies (enemies (getRoom game))
     return game
-evaluateFightCommand game (Just PlayerInfo)         = do
+evaluateFightCommand game (Just PlayerInfo)             = do
     printPlayer (player game)
     return game
-evaluateFightCommand game (Just (UseItemFight _))   = do
-    putStrLn "You can't use items in a fight"
-    return game
+evaluateFightCommand game (Just (UseItemFight name))    = useItemInFight game name
 
 fightLoop :: Game -> IO Game
 fightLoop game  = case enemies (getRoom game) of

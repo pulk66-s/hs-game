@@ -3,6 +3,8 @@ module Item (
     Weapon(..),
     Sword(..),
     Key(..),
+    Consumable(..),
+    HealthPotion(..),
     excalibur,
     rustySword,
     weaponDamage,
@@ -17,10 +19,15 @@ data Sword = Sword {
     damage :: Int
 } deriving Show
 
+data HealthPotion = HealthPotion {
+    healthPotionName :: String,
+    healthPotionHealAmount :: Int
+} deriving Show
+
 newtype Weapon = WSword Sword
     deriving Show
 
-newtype Consumable = CHealth Int
+newtype Consumable = CHealth HealthPotion
     deriving Show
 
 newtype Key = Key String
@@ -39,7 +46,7 @@ rustySword :: Weapon
 rustySword = WSword (Sword "Rusty Sword" 5)
 
 littleHealthPotion :: Consumable
-littleHealthPotion = CHealth 5
+littleHealthPotion = CHealth (HealthPotion "Little_Health_Potion" 5)
 
 weaponDamage :: Weapon -> Int
 weaponDamage (WSword s) = damage s

@@ -57,6 +57,8 @@ parseFightCommand cmd
     | startsWith "attack" cmd  = Just (Attack (drop 7 cmd))
 parseFightCommand "enemies"     = Just EnemyInfo
 parseFightCommand "player"      = Just PlayerInfo
+parseFightCommand cmd
+    | startsWith "use " cmd     = Just (UseItemFight (drop 4 cmd))
 parseFightCommand _             = Nothing
 
 getFightCommand ::  IO (Maybe FightCommand)

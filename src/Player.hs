@@ -9,7 +9,8 @@ module Player (
     printPlayer,
     addItems,
     hasKey,
-    strengthStat
+    strengthStat,
+    playerUseItemInFight
 ) where
 
 import Item
@@ -88,3 +89,12 @@ hasKey p (Key name) = case findInList checkGoodKey (inventory p) of
 
 strengthStat :: Player -> Int
 strengthStat p  = playerStrength (playerStatistic p)
+
+useConsumable :: Player -> Consumable -> Player
+useConsumable player (CHealth p) = player {
+    playerHealth = playerHealth player + healthPotionHealAmount p
+}
+
+playerUseItemInFight :: Player -> Item -> Maybe Player
+playerUseItemInFight player (IConsumable consumable)  = Just (useConsumable player consumable)
+playerUseItemInFight _ _                              = Nothing
