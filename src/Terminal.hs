@@ -26,8 +26,8 @@ data FightCommand =
     Attack String       |
     EnemyInfo           |
     PlayerInfo          |
-    UseItemFight String
-    
+    UseItemFight String |
+    UseSpell String
 
 moveCommand :: String -> Maybe Command
 moveCommand "N"     = Just (Move North)
@@ -58,7 +58,8 @@ parseFightCommand cmd
 parseFightCommand "enemies"     = Just EnemyInfo
 parseFightCommand "player"      = Just PlayerInfo
 parseFightCommand cmd
-    | startsWith "use " cmd     = Just (UseItemFight (drop 4 cmd))
+    | startsWith "use item " cmd     = Just (UseItemFight (drop 9 cmd))
+    | startsWith "use spell " cmd    = Just (UseSpell (drop 10 cmd))
 parseFightCommand _             = Nothing
 
 getFightCommand ::  IO (Maybe FightCommand)

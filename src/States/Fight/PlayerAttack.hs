@@ -1,5 +1,6 @@
 module States.Fight.PlayerAttack (
-    launchPlayerAttack
+    launchPlayerAttack,
+    checkStillEnemies
 ) where
 
 import Game

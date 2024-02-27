@@ -10,7 +10,10 @@ module List (
     lengthList,
     addElem,
     startsWith,
-    find
+    find,
+    map',
+    unwrapList,
+    getFirstWord
 ) where
 
 newtype List a = List [a] 
@@ -62,3 +65,14 @@ find _ []                   = Nothing
 find f (x:xs)   | f x       = Just x
                 | otherwise = find f xs
 
+map' :: (a -> b) -> List a -> List b
+map' f (List xs) = List (map f xs)
+
+unwrapList :: List a -> [a]
+unwrapList (List a) = a
+
+getFirstWord :: String -> String
+getFirstWord []     = []
+getFirstWord (x:xs)
+    | x == ' '      = []
+    | otherwise     = x : getFirstWord xs

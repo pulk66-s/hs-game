@@ -3,7 +3,6 @@ module Player (
     newPlayer,
     findWeaponByName,
     holdWeapon,
-    playerDamage,
     playerIsDead,
     printPlayer,
     hasKey,
@@ -18,9 +17,10 @@ import List
 import Player.Inventory
 import Player.Data
 import Player.Statistics
+import Player.Magic
 
 newPlayer :: Player
-newPlayer   = Player 20 20 "Hugo" Nothing (List []) defaultPlayerStatistic 
+newPlayer   = Player 20 20 "Hugo" Nothing (List []) defaultPlayerStatistic defaultPlayerMagic
 
 holdWeapon :: Player -> Weapon -> Player
 holdWeapon p w  = p { playerWeapon = Just w }
@@ -36,18 +36,34 @@ findWeaponByName p n    = unwrapItem (findInList findWeapon (inventory p))
         unwrapItem (Just (IWeapon w))   = Just w
         unwrapItem _                    = Nothing
 
-playerDamage :: Player -> Int
-playerDamage p  = getDmg (playerWeapon p)
-    where
-        getDmg Nothing  = 1
-        getDmg (Just w) = weaponDamage w
-
 playerIsDead :: Player -> Bool
 playerIsDead p  = playerHealth p <= 0
 
 printPlayerWeapon :: Maybe Weapon -> IO()
 printPlayerWeapon Nothing   = putStrLn "No weapon"
 printPlayerWeapon (Just w)  = printWeapon w
+
+printSpell :: PlayerSpell -> IO()
+printSpell s    = do
+    putStr ("Name: " ++ spellName s)
+    putStr (", Damage: " ++ show (spellDamage s))
+    putStrLn (", Mana Cost: " ++ show (spellManaCost s))
+
+printSpellCategory :: (Int, List PlayerSpell) -> IO()
+printSpellCategory (n, List l)   = do
+    putStrLn ("Level " ++ show n)
+    printList (List l) printSpell
+
+printSpellList :: List (Int, List PlayerSpell) -> IO()
+printSpellList inventory    = do
+    let l   = unwrapList inventory
+    mapM_ printSpellCategory l
+
+printPlayerMagic :: PlayerMagic -> IO()
+printPlayerMagic magic  = do
+    putStrLn ("Mana " ++ show (playerMana magic))
+    putStrLn "Spell List:"
+    printSpellList (spellInventory magic)
 
 printPlayer :: Player -> IO()
 printPlayer p   = do
@@ -58,6 +74,8 @@ printPlayer p   = do
     printPlayerInventory p
     putStrLn "\nWeapon: "
     printPlayerWeapon (playerWeapon p)
+    putStrLn "Magic: "
+    printPlayerMagic (playerMagic p)
 
 hasKey :: Player -> Key -> Bool
 hasKey p (Key name) = case findInList checkGoodKey (inventory p) of

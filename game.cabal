@@ -41,6 +41,8 @@ library
       Player
       Player.Data
       Player.Inventory
+      Player.Magic
+      Player.Magic.SpellCast
       Player.Statistics
       Room
       States.Fight

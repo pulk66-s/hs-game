@@ -1,4 +1,5 @@
 module Enemies (
+    EnemyStatistic(..),
     Enemy(..),
     goblin,
     listEnemies,
@@ -14,8 +15,8 @@ module Enemies (
 ) where
 
 import Item.Weapon
-import Player
 import List
+import Player.Data
 
 data EnemyStatistic = EnemyStatistic {
     enemyStrength :: Int,
@@ -28,7 +29,7 @@ data Enemy = Enemy {
     enemyHealth :: Int,
     enemyWeapon :: Weapon,
     enemyStatistic :: EnemyStatistic
-} 
+}
 
 defaultEnemyStatistic :: EnemyStatistic
 defaultEnemyStatistic  = EnemyStatistic 10 10 10
@@ -48,6 +49,12 @@ dealDamageToEnemy e amount = e { enemyHealth = enemyHealth e - amount }
 
 enemyIsDead :: Enemy -> Bool
 enemyIsDead e    = enemyHealth e <= 0
+
+playerDamage :: Player -> Int
+playerDamage p  = getDmg (playerWeapon p)
+    where
+        getDmg Nothing  = 1
+        getDmg (Just w) = weaponDamage w
 
 attackEnemy :: Player -> Enemy -> Enemy
 attackEnemy p e    = e { enemyHealth = enemyHealth e - playerAttack }

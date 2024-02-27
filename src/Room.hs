@@ -9,7 +9,8 @@ module Room (
     isNextRoom,
     printDirection,
     addKeyToRoom,
-    roomHasEnemies
+    roomHasEnemies,
+    getEnemyByName
 ) where
 
 import Item
@@ -25,7 +26,7 @@ data Room = Room {
     loot :: List Item,
     enemies :: List Enemy,
     key :: Maybe Key
-} 
+}
 
 printDirection :: Direction -> IO()
 printDirection North    = putStrLn "North"
@@ -71,3 +72,6 @@ addKeyToRoom k r    = r { key = Just k }
 
 roomHasEnemies :: Room -> Bool
 roomHasEnemies r    = not (isEmpty (enemies r))
+
+getEnemyByName :: Room -> String -> Maybe Enemy
+getEnemyByName r name   = findInList (\e -> enemyName e == name) (enemies r)

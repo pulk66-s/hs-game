@@ -1,8 +1,8 @@
 module Game (
     Game(..),
+    getRoom,
     defaultGame,
     getNextRoom,
-    getRoom,
     updateRoom,
     saveCurrentRoom
 ) where
@@ -20,7 +20,10 @@ data Game = Game {
     player :: Player,
     room :: (Int, Room),
     rooms :: List (Int, Room)
-} 
+}
+
+getRoom :: Game -> Room
+getRoom g = snd (room g)
 
 startingRoom :: Room
 startingRoom    = addEndRoom (addEnnemy (addLoot defaultRoom))
@@ -58,9 +61,6 @@ getNextRoom :: Game -> Direction -> Maybe (Int, Room)
 getNextRoom g d = case findInList (\(d', _) -> d' == d) (nextRooms (getRoom g)) of
     Just (_, i) -> findInList (\(i', _) -> i' == i) (rooms g)
     Nothing     -> Nothing
-
-getRoom :: Game -> Room
-getRoom g = snd (room g)
 
 updateRoom :: Game -> (Int, Room) -> Game
 updateRoom game r   = game { room = r }

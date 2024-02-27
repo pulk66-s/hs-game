@@ -1,6 +1,8 @@
 module Player.Data (
     Player(..),
-    PlayerStatistic(..)
+    PlayerStatistic(..),
+    PlayerMagic(..),
+    PlayerSpell(..)
 ) where
 
 import Item
@@ -11,7 +13,19 @@ data PlayerStatistic = PlayerStatistic {
     playerStrength :: Int,
     playerDexterity :: Int,
     playerIntelligence :: Int
-} 
+}
+
+data PlayerSpell = PlayerSpell {
+    spellName :: String,
+    spellDamage :: Int,
+    spellManaCost :: Int
+}
+
+data PlayerMagic = PlayerMagic {
+    playerMana :: Int,
+    playerMaxMana :: Int,
+    spellInventory :: List (Int, List PlayerSpell)
+}
 
 data Player = Player {
     playerHealth :: Int,
@@ -19,5 +33,6 @@ data Player = Player {
     playerName :: String,
     playerWeapon :: Maybe Weapon,
     inventory :: List Item,
-    playerStatistic :: PlayerStatistic
+    playerStatistic :: PlayerStatistic,
+    playerMagic :: PlayerMagic
 } 
