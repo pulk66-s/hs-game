@@ -31,8 +31,7 @@ printWeapon :: Weapon -> IO()
 printWeapon w   = putStr (weaponName w ++ " with " ++ show (weaponDamage w) ++ " damage")
 
 instance Eq Sword where
-    (==) (Sword n1 d1) (Sword n2 d2) = n1 == n2
+    (==) (Sword n1 _) (Sword n2 _)  = n1 == n2
 
 instance Eq Weapon where
-    (==) (WSword s1) (WSword s2) = s1 == s2
-    (==) _ _                      = False
+    (==) (WSword s1) (WSword s2)    = s1 == s2

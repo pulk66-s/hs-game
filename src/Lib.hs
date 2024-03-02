@@ -18,7 +18,7 @@ tryHoldingWeapon g (Just w) n   = do
     n (g { player = holdWeapon (player g) w})
 
 understandCommand :: Game -> Command -> (Game -> IO()) -> IO()
-understandCommand _ Exit next           = putStrLn "Goodbye"
+understandCommand _ Exit _              = putStrLn "Goodbye"
 understandCommand g (HoldWeapon n) next = tryHoldingWeapon g (findWeaponByName (player g) n) next
 understandCommand g (Move d) next       = moveCommand g d next
 understandCommand g Search next         = searchCommand g next

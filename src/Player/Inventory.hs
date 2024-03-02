@@ -31,10 +31,7 @@ useHealthPotion player potion = player {
         newHealth   = playerHealth player + healthPotionHealAmount potion
 
 useConsumable :: Player -> Consumable -> Player
--- useConsumable player (CHealth p) = player {
---     playerHealth = playerHealth player + healthPotionHealAmount p
--- }
-useConsumable player (CHealth p) = useHealthPotion player p
+useConsumable player (CHealth p)    = useHealthPotion player p
 
 playerUseItemInFight :: Player -> Item -> Maybe Player
 playerUseItemInFight player (IConsumable consumable) 

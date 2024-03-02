@@ -5,7 +5,6 @@ module States.Fight.EnemyAttack (
 import Game
 import Enemies
 import Dice
-import Player.Data
 
 -- Because we can't use other libraries...
 foldM :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a

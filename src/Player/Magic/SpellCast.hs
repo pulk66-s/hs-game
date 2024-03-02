@@ -11,11 +11,11 @@ import Room
 import List
 
 getSpell :: Player -> String -> Maybe PlayerSpell
-getSpell player name    = do
-    let (List inventory)    = spellInventory (playerMagic player)
-    checkCategories inventory
+getSpell p name = do
+    let (List inv)  = spellInventory (playerMagic p)
+    checkCategories inv
     where
-        spellNameIs name spell                  = spellName spell == name
+        spellNameIs _ spell                     = spellName spell == name
         checkCategories []                      = Nothing
         checkCategories ((_, List spells):xs)   = case findInList (spellNameIs name) (List spells) of
             Nothing     -> checkCategories xs
@@ -54,7 +54,7 @@ getSpellTarget game name spell  = case cutName of
     ""  -> do
         putStrLn "You need to specify a target"
         return game
-    e   -> do
+    _   -> do
         game'   <- checkSpellTarget game cutName spell
         checkStillEnemies game' (enemies (getRoom game'))
     where

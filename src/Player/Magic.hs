@@ -3,9 +3,7 @@ module Player.Magic (
 ) where
 
 import Player.Data
-import Enemies
 import List
-import Room
 
 fireball :: PlayerSpell
 fireball    = PlayerSpell "Fireball" 20 3

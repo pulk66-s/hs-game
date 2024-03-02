@@ -28,10 +28,10 @@ applyAttack game name   = case findInList nameFilter (enemies (getRoom game)) of
         nameFilter e    = enemyName e == name
 
 checkStillEnemies :: Game -> List Enemy -> IO Game
-checkStillEnemies game (List [])        = return game
-checkStillEnemies game (List enemies)   = do
+checkStillEnemies game (List [])    = return game
+checkStillEnemies game (List e)     = do
     putStrLn "Enemies are attacking you"
-    enemiesAttack game enemies
+    enemiesAttack game e
 
 launchAttackSuccess :: Game -> String -> IO Game
 launchAttackSuccess game name  = do

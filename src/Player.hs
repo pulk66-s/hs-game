@@ -12,7 +12,6 @@ module Player (
 import Item
 import Item.Weapon
 import Item.Key
-import Item.Consumable
 import List
 import Player.Inventory
 import Player.Data
@@ -55,8 +54,8 @@ printSpellCategory (n, List l)   = do
     printList (List l) printSpell
 
 printSpellList :: List (Int, List PlayerSpell) -> IO()
-printSpellList inventory    = do
-    let l   = unwrapList inventory
+printSpellList inv  = do
+    let l   = unwrapList inv
     mapM_ printSpellCategory l
 
 printPlayerMagic :: PlayerMagic -> IO()

@@ -11,7 +11,8 @@ module Room (
     addKeyToRoom,
     roomHasEnemies,
     getEnemyByName,
-    setWinRoom
+    setWinRoom,
+    opposite
 ) where
 
 import Item
@@ -83,3 +84,9 @@ getEnemyByName r name   = findInList (\e -> enemyName e == name) (enemies r)
 
 setWinRoom :: Room -> Room
 setWinRoom room = room { isWinRoom = True }
+
+opposite :: Direction -> Direction
+opposite North  = South
+opposite East   = West
+opposite South  = North
+opposite West   = East

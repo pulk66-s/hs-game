@@ -37,4 +37,3 @@ instance Eq HealthPotion where
 
 instance Eq Consumable where
     (==) (CHealth h1) (CHealth h2) = h1 == h2
-    (==) _ _                        = False

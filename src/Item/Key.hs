@@ -14,4 +14,3 @@ keyName (Key k) = k
 
 instance Eq Key where
     (==) (Key k1) (Key k2)  = k1 == k2
-    (==) _ _                = False

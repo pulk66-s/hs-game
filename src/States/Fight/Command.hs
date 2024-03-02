@@ -7,15 +7,8 @@ import Terminal
 import Enemies
 import Room
 import Player
-import Player.Magic
 import Player.Magic.SpellCast
-import List
-import Item
-import Item.Weapon
-import Item.Consumable
-import Item.Key
 import States.Fight.PlayerAttack
-import States.Fight.EnemyAttack
 import States.Fight.ItemUse
 
 evaluateUnknownCommand :: Game -> IO Game

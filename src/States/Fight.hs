@@ -5,14 +5,7 @@ module States.Fight (
 import Game
 import Room
 import Enemies
-import Player
 import Terminal
-import Item
-import Item.Weapon
-import Item.Consumable
-import Item.Key
-import List
-import Dice
 import States.Fight.Command
 
 fightLoop :: Game -> IO Game

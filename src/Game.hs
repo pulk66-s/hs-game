@@ -73,6 +73,6 @@ saveCurrentRoom game   = game { rooms = updateList (rooms game) (room game) (f (
         f (i, _) (i', _)    = i == i'
 
 checkWinCondition :: Game -> Bool
-checkWinCondition game  = isWinRoom room && not (roomHasEnemies room)
+checkWinCondition game  = isWinRoom r && not (roomHasEnemies r)
     where
-        room    = getRoom game
+        r   = getRoom game
