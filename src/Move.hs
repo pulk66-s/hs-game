@@ -11,7 +11,7 @@ checkRoomKey game (index, r)    = case key r of
     Just k  -> checkKey game k
     Nothing -> Right newGame
     where
-        newGame                         = updateRoom (saveCurrentRoom game) (index, r)
+        newGame                     = updateRoom (saveCurrentRoom game) (index, r)
         checkKey g k
             | hasKey (player g) k   = Right newGame
             | otherwise             = Left "You don't have the key"

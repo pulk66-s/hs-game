@@ -50,17 +50,17 @@ parseCommand "player"           = Just PlayerData
 parseCommand cmd
     | startsWith "move " cmd    = moveCommand (drop 5 cmd)
     | startsWith "hold " cmd    = Just (HoldWeapon (drop 5 cmd))
-parseCommand _                                  = Nothing
+parseCommand _                  = Nothing
 
 parseFightCommand :: String -> Maybe FightCommand
 parseFightCommand cmd
-    | startsWith "attack" cmd  = Just (Attack (drop 7 cmd))
-parseFightCommand "enemies"     = Just EnemyInfo
-parseFightCommand "player"      = Just PlayerInfo
+    | startsWith "attack" cmd       = Just (Attack (drop 7 cmd))
+parseFightCommand "enemies"         = Just EnemyInfo
+parseFightCommand "player"          = Just PlayerInfo
 parseFightCommand cmd
-    | startsWith "use item " cmd     = Just (UseItemFight (drop 9 cmd))
-    | startsWith "use spell " cmd    = Just (UseSpell (drop 10 cmd))
-parseFightCommand _             = Nothing
+    | startsWith "use item " cmd    = Just (UseItemFight (drop 9 cmd))
+    | startsWith "use spell " cmd   = Just (UseSpell (drop 10 cmd))
+parseFightCommand _                 = Nothing
 
 getFightCommand ::  IO (Maybe FightCommand)
 getFightCommand = do
@@ -68,5 +68,8 @@ getFightCommand = do
     parseFightCommand <$> getLine
 
 printPrompt :: IO()
-printPrompt = putStrLn "===" >> putStrLn "Enter your command" >>
-    putStr ">> " >> hFlush stdout
+printPrompt = do
+    putStrLn "==="
+    putStrLn "Enter your command"
+    putStr ">> "
+    hFlush stdout

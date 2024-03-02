@@ -4,7 +4,8 @@ module Game (
     defaultGame,
     getNextRoom,
     updateRoom,
-    saveCurrentRoom
+    saveCurrentRoom,
+    checkWinCondition
 ) where
 
 import Player
@@ -46,10 +47,11 @@ enemyRoom  = addLoot (addStartingRoom (addEnnemy defaultRoom))
         addLoot         = addLootToRoom (IKey (Key "End Key"))
 
 lockedRoom :: Room
-lockedRoom = addStartingRoom (addKey defaultRoom)
+lockedRoom = addEnnemy (setWinRoom (addStartingRoom (addKey defaultRoom)))
     where
         addKey          = addKeyToRoom (Key "End Key")
         addStartingRoom = addNextRoom West 0
+        addEnnemy       = addEnnemyToRoom boss
 
 defaultRoomList :: List (Int, Room)
 defaultRoomList = List [(0, startingRoom), (1, lootRoom), (2, enemyRoom), (3, lockedRoom)]
@@ -69,3 +71,8 @@ saveCurrentRoom :: Game -> Game
 saveCurrentRoom game   = game { rooms = updateList (rooms game) (room game) (f (room game)) }
     where
         f (i, _) (i', _)    = i == i'
+
+checkWinCondition :: Game -> Bool
+checkWinCondition game  = isWinRoom room && not (roomHasEnemies room)
+    where
+        room    = getRoom game

@@ -11,7 +11,8 @@ module Enemies (
     enemyAttackPlayer,
     enemyDamage,
     enemyIsDead,
-    enemyStrengthStat
+    enemyStrengthStat,
+    boss
 ) where
 
 import Item.Weapon
@@ -36,6 +37,9 @@ defaultEnemyStatistic  = EnemyStatistic 10 10 10
 
 goblin :: Enemy
 goblin  = Enemy "Goblin" 15 rustySword defaultEnemyStatistic
+
+boss :: Enemy
+boss    = Enemy "Boss" 100 excalibur defaultEnemyStatistic
 
 listEnemies :: List Enemy -> IO()
 listEnemies (List [])   = putStrLn "There is no Enemy"
