@@ -45,3 +45,9 @@ Not used but you can find the function `trim` in the file `src/Terminal.hs`
 ### 3.5 Parse Command
 
 You can find the command `parseCommand` or `parseFightCommand` in the file `src/Terminal.hs` that parse the command of the player.
+
+## 4. Game Engine
+
+### 4.1 Delete from
+
+You can find in `src/List.hs` the function `_deleteFrom` function

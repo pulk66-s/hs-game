@@ -19,6 +19,7 @@ data Command =
     ShowInventory       |
     HoldWeapon String   |
     PlayerData          |
+    Grab String         |
     UseItem String
     
 
@@ -30,14 +31,14 @@ data FightCommand =
     UseSpell String
 
 -- Here but not used
-consumePrefix :: String -> String -> Maybe String
-consumePrefix prefix str
+_consumePrefix :: String -> String -> Maybe String
+_consumePrefix prefix str
     | startsWith prefix str = Just (drop (length prefix) str)
     | otherwise             = Nothing
 
 -- trim function
-trim :: String -> String
-trim = f . f
+_trim :: String -> String
+_trim = f . f
     where
         f           = reverse . dropWhile isSpace
         isSpace ' ' = True
@@ -68,6 +69,7 @@ parseCommand "player"           = Just PlayerData
 parseCommand cmd
     | startsWith "move " cmd    = moveCommand (drop 5 cmd)
     | startsWith "hold " cmd    = Just (HoldWeapon (drop 5 cmd))
+    | startsWith "grab " cmd    = Just (Grab (drop 5 cmd))
 parseCommand _                  = Nothing
 
 parseFightCommand :: String -> Maybe FightCommand

@@ -13,7 +13,8 @@ module List (
     find,
     map',
     unwrapList,
-    getFirstWord
+    getFirstWord,
+    deleteElem
 ) where
 
 newtype List a = List [a] 
@@ -76,3 +77,13 @@ getFirstWord []     = []
 getFirstWord (x:xs)
     | x == ' '      = []
     | otherwise     = x : getFirstWord xs
+
+deleteElem :: Eq a => a -> List a -> List a
+deleteElem x (List xs)  = List (filter (/= x) xs)
+
+-- not used
+_deleteFrom :: (a -> Bool) -> [(a, b)] -> [(a, b)]
+_deleteFrom _ []    = []
+_deleteFrom f ((x, y):xs)
+    | f x           = _deleteFrom f xs
+    | otherwise     = (x, y) : _deleteFrom f xs

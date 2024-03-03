@@ -1,5 +1,6 @@
 module Player.Inventory (
     printPlayerInventory,
+    addItemToPlayerInventory,
     addItemsToPlayerInventory,
     playerUseItemInFight
 ) where
@@ -11,6 +12,11 @@ import Item.Consumable
 
 printPlayerInventory :: Player -> IO()
 printPlayerInventory p = printList (inventory p) (\x -> printItem x >> putStrLn "")
+
+addItemToPlayerInventory :: Player -> Item -> Player
+addItemToPlayerInventory p item = p {
+    inventory = addElem item (inventory p)
+}
 
 addItemsToPlayerInventory :: Player -> [Item] -> Player
 addItemsToPlayerInventory p items    = p {

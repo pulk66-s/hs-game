@@ -6,15 +6,13 @@ import Game
 import Room
 import Item
 import List
-import Player
 
 applyChanges :: Game -> Game
-applyChanges g  = newRoom (updatePlayer g)
+applyChanges g  = newRoom g
     where
-        updatePlayer g'     = g' { player = updateInventory (player g) }
-        updateInventory p   = p { inventory = addList (inventory p) (loot (getRoom g)) }
-        newRoom g'          = g' { room = updateLoot (room g) }
-        updateLoot (i, r)   = (i, r { loot = defaultList })
+        addFoundLoot (i, r) = (i, r { foundLoot = loot r })
+        newRoom g'          = g' { room = deleteLoot (addFoundLoot (room g)) }
+        deleteLoot (i, r)   = (i, r { loot = defaultList })
 
 searchCommand :: Game -> (Game -> IO()) -> IO()
 searchCommand g n   = case loot (getRoom g) of
@@ -22,4 +20,5 @@ searchCommand g n   = case loot (getRoom g) of
     List l  -> do
         putStrLn "You found some loot"
         printItems l
+        putStrLn ""
         n (applyChanges g)

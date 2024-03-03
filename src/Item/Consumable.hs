@@ -22,7 +22,7 @@ printHealthPotion potion    = do
     putStr (healthPotionName potion)
     putStr " with "
     putStr (show (healthPotionHealAmount potion))
-    putStrLn " health"
+    putStr " health"
 
 printConsumable :: Consumable -> IO()
 printConsumable (CHealth h) = do

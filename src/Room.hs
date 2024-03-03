@@ -12,7 +12,9 @@ module Room (
     roomHasEnemies,
     getEnemyByName,
     setWinRoom,
-    opposite
+    opposite,
+    grabItemFromRoom,
+    deleteItemFromRoom
 ) where
 
 import Item
@@ -26,6 +28,7 @@ data Direction = North | East | South | West
 data Room = Room {
     nextRooms :: List (Direction, Int),
     loot :: List Item,
+    foundLoot :: List Item,
     enemies :: List Enemy,
     key :: Maybe Key,
     isWinRoom :: Bool
@@ -38,7 +41,7 @@ printDirection South    = putStrLn "South"
 printDirection West     = putStrLn "West"
 
 defaultRoom :: Room
-defaultRoom = Room (List []) (List []) (List []) Nothing False
+defaultRoom = Room (List []) (List []) (List []) (List []) Nothing False
 
 addLootToRoom :: Item -> Room -> Room
 addLootToRoom x r   = r { loot = addElem x (loot r) }
@@ -90,3 +93,9 @@ opposite North  = South
 opposite East   = West
 opposite South  = North
 opposite West   = East
+
+grabItemFromRoom :: String -> Room -> Maybe Item
+grabItemFromRoom name room  = findInList (\i -> itemName i == name) (foundLoot room)
+
+deleteItemFromRoom :: Item -> Room -> Room
+deleteItemFromRoom item room    = room { foundLoot = removeList item (foundLoot room) }

@@ -4,7 +4,10 @@ module Lib (
 
 import Game
 import Terminal
+import Room
+import Item
 import Player
+import Player.Inventory
 import Item.Weapon
 import Commands.Show
 import Commands.Move
@@ -17,10 +20,23 @@ tryHoldingWeapon g (Just w) n   = do
     printWeapon w
     n (g { player = holdWeapon (player g) w})
 
+evaluateGrabCommand :: Game -> String -> (Game -> IO()) -> IO()
+evaluateGrabCommand g name next = case grabItemFromRoom name (getRoom g) of
+    Nothing     -> putStrLn "You can't grab that" >> next g
+    Just item   -> do
+        putStrLn "You grabbed: "
+        printItem item
+        putStrLn ""
+        let (i, r)  = room g
+        let r'      = deleteItemFromRoom item r
+        let p'      = addItemToPlayerInventory (player g) item
+        next (g { player = p', room = (i, r') })
+
 understandCommand :: Game -> Command -> (Game -> IO()) -> IO()
 understandCommand _ Exit _              = putStrLn "Goodbye"
 understandCommand g (HoldWeapon n) next = tryHoldingWeapon g (findWeaponByName (player g) n) next
 understandCommand g (Move d) next       = moveCommand g d next
+understandCommand g (Grab item) next    = evaluateGrabCommand g item next
 understandCommand g Search next         = searchCommand g next
 understandCommand g cmd next            = showCommands g cmd next
 
