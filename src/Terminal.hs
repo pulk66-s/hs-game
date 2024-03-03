@@ -29,15 +29,33 @@ data FightCommand =
     UseItemFight String |
     UseSpell String
 
+-- Here but not used
+consumePrefix :: String -> String -> Maybe String
+consumePrefix prefix str
+    | startsWith prefix str = Just (drop (length prefix) str)
+    | otherwise             = Nothing
+
+-- trim function
+trim :: String -> String
+trim = f . f
+    where
+        f           = reverse . dropWhile isSpace
+        isSpace ' ' = True
+        isSpace _   = False
+
 moveCommand :: String -> Maybe Command
 moveCommand "N"     = Just (Move North)
 moveCommand "North" = Just (Move North)
+moveCommand "north" = Just (Move North)
 moveCommand "S"     = Just (Move South)
 moveCommand "South" = Just (Move South)
+moveCommand "south" = Just (Move South)
 moveCommand "E"     = Just (Move East)
 moveCommand "East"  = Just (Move East)
+moveCommand "east"  = Just (Move East)
 moveCommand "W"     = Just (Move West)
 moveCommand "West"  = Just (Move West)
+moveCommand "west"  = Just (Move West)
 moveCommand _       = Nothing
 
 parseCommand :: String -> Maybe Command
