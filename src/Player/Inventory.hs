@@ -2,8 +2,7 @@ module Player.Inventory (
     printPlayerInventory,
     addItemToPlayerInventory,
     addItemsToPlayerInventory,
-    playerUseItemInFight,
-    checkInventory
+    playerUseItemInFight
 ) where
 
 import List
@@ -48,4 +47,4 @@ playerUseItemInFight _ _
 
 -- Not used but here is an implementation
 _checkInventory :: Item -> [Item] -> Bool
-_checkInventory item list   = not (null (findInList (== item) list))
+_checkInventory item list   = not (null (findInList (== item) (List list)))

@@ -9,6 +9,7 @@ module Item (
 
 import Item.Weapon
 import Item.Key
+import List
 import Item.Consumable
 
 data Item =
@@ -34,7 +35,7 @@ itemNameFilter name item    = itemName item == name
 
 -- Not used but here is an implementation
 _lookupItem :: Item -> [Item] -> Maybe String
-_lookupItem item list   = case findInList (== item) list of
+_lookupItem item list   = case findInList (== item) (List list) of
     Just _  -> Just (itemName item)
     _       -> Nothing
 
