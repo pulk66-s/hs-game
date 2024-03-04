@@ -32,6 +32,12 @@ itemName (IConsumable c)    = consumableName c
 itemNameFilter :: String -> Item -> Bool
 itemNameFilter name item    = itemName item == name
 
+-- Not used but here is an implementation
+_lookupItem :: Item -> [Item] -> Maybe String
+_lookupItem item list   = case findInList (== item) list of
+    Just _  -> Just (itemName item)
+    _       -> Nothing
+
 instance Eq Item where
     (==) (IWeapon w1) (IWeapon w2)          = w1 == w2
     (==) (IKey k1) (IKey k2)                = k1 == k2

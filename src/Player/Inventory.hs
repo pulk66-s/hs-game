@@ -2,7 +2,8 @@ module Player.Inventory (
     printPlayerInventory,
     addItemToPlayerInventory,
     addItemsToPlayerInventory,
-    playerUseItemInFight
+    playerUseItemInFight,
+    checkInventory
 ) where
 
 import List
@@ -44,3 +45,7 @@ playerUseItemInFight player (IConsumable consumable)
     = Just (removeItemFromPlayerInventory (useConsumable player consumable) (IConsumable consumable))
 playerUseItemInFight _ _
     = Nothing
+
+-- Not used but here is an implementation
+_checkInventory :: Item -> [Item] -> Bool
+_checkInventory item list   = not (null (findInList (== item) list))

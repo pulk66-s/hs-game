@@ -46,15 +46,15 @@ enemyRoom  = addLoot (addStartingRoom (addEnnemy defaultRoom))
         addStartingRoom = addNextRoom North 0
         addLoot         = addLootToRoom (IKey (Key "End Key"))
 
-lockedRoom :: Room
-lockedRoom = addEnnemy (setWinRoom (addStartingRoom (addKey defaultRoom)))
+winRoom :: Room
+winRoom = addEnnemy (setWinRoom (addStartingRoom (addKey defaultRoom)))
     where
         addKey          = addKeyToRoom (Key "End Key")
         addStartingRoom = addNextRoom West 0
         addEnnemy       = addEnnemyToRoom boss
 
 defaultRoomList :: List (Int, Room)
-defaultRoomList = List [(0, startingRoom), (1, lootRoom), (2, enemyRoom), (3, lockedRoom)]
+defaultRoomList = List [(0, startingRoom), (1, lootRoom), (2, enemyRoom), (3, winRoom)]
 
 defaultGame :: Game
 defaultGame = Game newPlayer (0, startingRoom) defaultRoomList

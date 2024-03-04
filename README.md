@@ -28,6 +28,22 @@ The `Item` datatype is an instance of the `Eq` typeclass. You can find the insta
 
 the map is represented by a list of indexed rooms in `src/Game.hs`. Each room (in `src/Room.hs`) has a `nextRooms` attribute that contains the list of direction and the index of the next room.
 
+### 2.1 Action
+
+There is nothing like an action function that create a room and limit the actions of the player. You have two states in the game, the `Game` state and the `Fight` state. The `Game` state is used to navigate through the dungeon and the `Fight` state is used to fight the boss. Each state has its own set of actions.The game update the room in the `rooms` list of the `Game` state.
+
+### 2.2 WinRoom
+
+You can find the function in `src/Game.hs`
+
+### 2.3 Room start
+
+You can find the room start in the `src/Game.hs` file.
+
+### 2.4 Default game
+
+You can find the default game in the `src/Game.hs` file.
+
 ## 3. Parsing Command
 
 ### 3.1 Consume prefix
@@ -51,3 +67,20 @@ You can find the command `parseCommand` or `parseFightCommand` in the file `src/
 ### 4.1 Delete from
 
 You can find in `src/List.hs` the function `_deleteFrom` function
+
+### 4.2 leaveRoom
+
+There is some update funtion in the game for room, you can find some in the `src/Game.hs` file such as `updateRoom`, `saveCurrentRoom` or `getNextRoom` that are used to update the room when the player leaves it. 
+
+### 4.3 CheckInventory  
+
+There is no `checkInventory` used because there is more specific function such as `hasKey` or `findWeaponByName` that are used instead. But you can find an implementation in `src/Player/Inventory.hs`
+
+### 4.4 Lookup item
+
+There is no lookup item used in the game but you can find an implementation in `src/Item.hs` 
+
+
+### 4.5 Step
+
+in the `src/Lib.hs` you have a similar function called `evaluateCommand`
